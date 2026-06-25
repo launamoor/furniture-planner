@@ -1,6 +1,15 @@
 "use client";
 
-import { Stage, Layer, Rect, Line, Group, Text } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Rect,
+  Line,
+  Group,
+  Text,
+  KonvaNodeEvents,
+  KonvaNodeComponent,
+} from "react-konva";
 import { useRoomStore } from "@/store/roomStore";
 import {
   metersToPixels,
@@ -8,6 +17,7 @@ import {
   snapToGrid,
   GRID_STEP,
 } from "@/utils/scale";
+import Konva from "konva";
 
 export default function RoomCanvas() {
   const { room, items, updateItemPosition } = useRoomStore();
@@ -54,6 +64,14 @@ export default function RoomCanvas() {
   };
   generateGridLines();
 
+  const handleCursor = (
+    e: Konva.KonvaEventObject<MouseEvent>,
+    cursor: string,
+  ): void => {
+    const stage = e.target.getStage();
+    if (stage) stage.container().style.cursor = cursor;
+  };
+
   return (
     <Stage width={800} height={600}>
       <Layer>
@@ -66,22 +84,71 @@ export default function RoomCanvas() {
           strokeWidth={1}
           fill={"#f5f0eb"}
         />
-        {horizontalLines.map((line, i) => (
+        {horizontalLines.map((line, i) => {
+          const currentHeight = line[1];
+          if ((currentHeight - metersToPixels(room.y)) % 100 === 0) {
+            return (
+              <Line
+                stroke={"#999"}
+                points={line}
+                strokeWidth={0.3}
+                key={`horizontal: ${i}`}
+              />
+            );
+          } else {
+            return (
+              <Line
+                stroke={"#999"}
+                points={line}
+                strokeWidth={0.1}
+                key={`horizontal: ${i}`}
+              />
+            );
+          }
+        })}
+        {verticalLines.map((line, i) => {
+          const currentWidth = line[0];
+          if ((currentWidth - metersToPixels(room.x)) % 100 === 0) {
+            return (
+              <Line
+                stroke={"#999"}
+                points={line}
+                strokeWidth={0.3}
+                key={`vertical: ${i}`}
+              />
+            );
+          } else {
+            return (
+              <Line
+                stroke={"#999"}
+                points={line}
+                strokeWidth={0.1}
+                key={`vertical: ${i}`}
+              />
+            );
+          }
+        })}
+
+        <Group x={metersToPixels(room.x)} y={metersToPixels(room.y)}>
           <Line
-            stroke={"#999"}
-            points={line}
-            strokeWidth={0.1}
-            key={`horizontal: ${i}`}
+            points={[0, 0, metersToPixels(room.width), 0]}
+            stroke={"black"}
+            strokeWidth={2}
           />
-        ))}
-        {verticalLines.map((line, i) => (
+          <Text
+            x={metersToPixels(room.width) / 2 - 20}
+            y={-20}
+            text={`Width: ${room.width}m`}
+          />
+        </Group>
+        <Group x={metersToPixels(room.x)} y={metersToPixels(room.y)}>
           <Line
-            stroke={"#999"}
-            points={line}
-            strokeWidth={0.1}
-            key={`vertical: ${i}`}
+            points={[0, 0, 0, metersToPixels(room.height)]}
+            stroke={"brown"}
+            strokeWidth={2}
           />
-        ))}
+          <Text x={0} y={-20} text={`Height: ${room.height}m`} fill={"brown"} />
+        </Group>
 
         {/* Furniture */}
         {items.map((item) => (
@@ -89,6 +156,10 @@ export default function RoomCanvas() {
             key={item.id}
             x={metersToPixels(room.x) + metersToPixels(item.x)}
             y={metersToPixels(room.y) + metersToPixels(item.y)}
+            onMouseEnter={(e) => handleCursor(e, "grab")}
+            onMouseLeave={(e) => handleCursor(e, "default")}
+            onMouseDown={(e) => handleCursor(e, "grabbing")}
+            onMouseUp={(e) => handleCursor(e, "grab")}
             draggable
             onDragMove={(e) => {
               const roomX = metersToPixels(room.x);
