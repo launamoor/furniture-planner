@@ -1,9 +1,10 @@
 import { create } from "zustand";
 
-type CatalogueItem = {
+export type CatalogueItem = {
   id: string;
   width: number;
-  depth: number;
+  height: number;
   name: string;
-  color: string;
+  colour: string;
+  woodType?: string;
 };
