@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRoomStore, FurnitureItem } from "@/store/roomStore";
+import { useUIStore } from "@/store/uiStore";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -43,14 +44,41 @@ const labelStyle: React.CSSProperties = {
   letterSpacing: "0.02em",
 };
 
+// ─── Generate random color ────────────────────────────────────────────────────
+
+const generateRandomBrownColor = (): string => {
+  // AI GENERATED
+  // 1. Keep the warm orange/brown hue spectrum
+  const h: number = Math.floor(Math.random() * (45 - 20 + 1)) + 20;
+
+  // 2. Keep saturation moderate so it looks like beige/tan instead of bright pastel orange
+  const s: number = (Math.floor(Math.random() * (50 - 25 + 1)) + 25) / 100;
+
+  // 3. Force high lightness (70% to 85%) to guarantee high contrast with black text
+  const l: number = (Math.floor(Math.random() * (85 - 70 + 1)) + 70) / 100;
+
+  const a: number = s * Math.min(l, 1 - l);
+  const f = (n: number): string => {
+    const k: number = (n + h / 30) % 12;
+    const color: number = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, "0");
+  };
+
+  return `#${f(0)}${f(8)}${f(4)}`;
+};
+
 // ─── PlacedItemRow ────────────────────────────────────────────────────────────
 
 function PlacedItemRow({
   item,
   onRemove,
+  onRotate,
 }: {
   item: FurnitureItem;
   onRemove: (id: string) => void;
+  onRotate: (id: string) => void;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -95,11 +123,30 @@ function PlacedItemRow({
           {item.name}
         </div>
         <div style={{ fontSize: "10px", color: "#9c8672" }}>
-          {item.width * 100}cm × {item.height * 100}cm
+          {Math.round(item.width * 100)}cm × {Math.round(item.height * 100)}cm
           {item.woodType ? ` · ${item.woodType}` : ""}
         </div>
       </div>
 
+      {/* Remove button */}
+      <button
+        onClick={() => onRotate(item.id)}
+        title="Rotate"
+        style={{
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          color: hovered ? "#9c8672" : "#c4bdb4",
+          fontSize: "14px",
+          lineHeight: 1,
+          padding: "2px 4px",
+          borderRadius: "3px",
+          transition: "color 0.12s",
+          flexShrink: 0,
+        }}
+      >
+        ↻
+      </button>
       {/* Remove button */}
       <button
         onClick={() => onRemove(item.id)}
@@ -126,9 +173,10 @@ function PlacedItemRow({
 // ─── FurniturePanel ───────────────────────────────────────────────────────────
 
 export default function FurniturePanel() {
-  const { items, addItem, removeItem } = useRoomStore();
+  const { items, addItem, removeItem, rotateItem } = useRoomStore();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<FormState>>({});
+  const { setStep } = useUIStore();
 
   const set =
     (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,7 +214,8 @@ export default function FurniturePanel() {
       width: Number(form.width) / 100, // cm → metres
       height: Number(form.depth) / 100, // cm → metres
       woodType: form.woodType.trim() || undefined,
-      colour: "#8B6F47", // default colour for now
+      colour: generateRandomBrownColor(),
+      rotation: 0,
       x: 0,
       y: 0,
     });
@@ -301,6 +350,36 @@ export default function FurniturePanel() {
         >
           Dodaj do pomieszczenia
         </button>
+        {/* ── Footer ── */}
+        <div
+          style={{
+            padding: "12px 14px",
+            borderTop: "1px solid #e5e0d8",
+          }}
+        >
+          <button
+            onClick={() => setStep(2)}
+            style={{
+              width: "100%",
+              padding: "7px",
+              background: "transparent",
+              color: "#7a6a5a",
+              border: "1px solid #e5e0d8",
+              borderRadius: "5px",
+              fontSize: "11px",
+              cursor: "pointer",
+              transition: "border-color 0.15s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.borderColor = "#8B6F47")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.borderColor = "#e5e0d8")
+            }
+          >
+            ← Wroc do edycji scian
+          </button>
+        </div>
       </div>
 
       {/* ── Placed items list ── */}
@@ -340,7 +419,12 @@ export default function FurniturePanel() {
               W pomieszczeniu · {items.length}
             </span>
             {items.map((item) => (
-              <PlacedItemRow key={item.id} item={item} onRemove={removeItem} />
+              <PlacedItemRow
+                key={item.id}
+                item={item}
+                onRemove={removeItem}
+                onRotate={rotateItem}
+              />
             ))}
           </>
         )}

@@ -15,6 +15,7 @@ export default function FurnitureItems({
     const stage = e.target.getStage();
     if (stage) stage.container().style.cursor = cursor;
   };
+
   return (
     <>
       {items.map((item) => (
@@ -129,7 +130,7 @@ export default function FurnitureItems({
             x={0}
             y={0}
             align="center"
-            text={`${metersToPixels(item.width)}cm`}
+            text={`${Math.round(item.width * 100)}cm`}
             width={metersToPixels(item.width)}
             height={metersToPixels(item.height)}
             ellipsis
@@ -141,7 +142,7 @@ export default function FurnitureItems({
             y={item.height / 2}
             align="right"
             verticalAlign="middle"
-            text={`${metersToPixels(item.height)}cm`}
+            text={`${Math.round(item.height * 100)}cm`}
             width={metersToPixels(item.width)}
             height={metersToPixels(item.height)}
             ellipsis

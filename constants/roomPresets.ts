@@ -5,8 +5,8 @@ export type RoomPreset = {
 };
 
 export const roomPresets: RoomPreset[] = [
-  { name: "small", width: 3, height: 3 },
-  { name: "medium", width: 5, height: 4 },
-  { name: "large", width: 7, height: 6 },
-  { name: "extra large", width: 9, height: 7 },
+  { name: "mały", width: 3, height: 3 },
+  { name: "średni", width: 5, height: 4 },
+  { name: "duży", width: 7, height: 6 },
+  { name: "XL", width: 9, height: 7 },
 ];

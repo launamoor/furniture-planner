@@ -10,13 +10,25 @@ import {
 } from "@/utils/scale";
 import GridLines from "./GridLines";
 import FurnitureItems from "./FurnitureItems";
+import WallItems from "./WallItems";
 
 export default function RoomCanvas() {
-  const { room, items, updateItemPosition, addItem, removeItem, setRoom } =
-    useRoomStore();
+  const {
+    room,
+    items,
+    walls,
+    updateItemPosition,
+    addItem,
+    removeItem,
+    setRoom,
+    rotateItem,
+    addWall,
+    removeWall,
+    updateWallPosition,
+  } = useRoomStore();
 
   return (
-    <Stage width={800} height={600}>
+    <Stage width={1000} height={800}>
       <Layer>
         {/* Room */}
         <Rect
@@ -38,12 +50,33 @@ export default function RoomCanvas() {
         <FurnitureItems
           room={room}
           items={items}
+          walls={walls}
           addItem={addItem}
           removeItem={removeItem}
           setRoom={setRoom}
+          rotateItem={rotateItem}
           updateItemPosition={updateItemPosition}
+          addWall={addWall}
+          removeWall={removeWall}
+          updateWallPosition={updateWallPosition}
         />
         {/* Furniture - End */}
+
+        {/* Walls */}
+        <WallItems
+          room={room}
+          items={items}
+          walls={walls}
+          addItem={addItem}
+          removeItem={removeItem}
+          setRoom={setRoom}
+          rotateItem={rotateItem}
+          updateItemPosition={updateItemPosition}
+          addWall={addWall}
+          removeWall={removeWall}
+          updateWallPosition={updateWallPosition}
+        />
+        {/* Walls - End */}
       </Layer>
     </Stage>
   );

@@ -2,6 +2,8 @@ const SCALE = 100;
 
 const GRID_SIZE = 0.1;
 
+export const WALL_THICKNESS = 0.1;
+
 export const GRID_STEP = 10;
 
 export function metersToPixels(meters: number): number {
