@@ -1,34 +1,32 @@
 "use client";
 
-import { Stage, Layer, Rect, Line, Group, Text } from "react-konva";
+import { Stage, Layer, Rect } from "react-konva";
 import { useRoomStore } from "@/store/roomStore";
-import {
-  metersToPixels,
-  pixelsToMeters,
-  snapToGrid,
-  GRID_STEP,
-} from "@/utils/scale";
+import { metersToPixels } from "@/utils/scale";
 import GridLines from "./GridLines";
 import FurnitureItems from "./FurnitureItems";
+import HangingFurnitureItems from "./HangingFurnitureItems";
 import WallItems from "./WallItems";
+import { useUIStore } from "@/store/uiStore";
 
 export default function RoomCanvas() {
   const {
     room,
     items,
+    hangingItems,
     walls,
     updateItemPosition,
-    addItem,
-    removeItem,
-    setRoom,
-    rotateItem,
-    addWall,
-    removeWall,
+    updateHangingItemPosition,
     updateWallPosition,
   } = useRoomStore();
 
+  const { showFloorFurniture, showHangingFurniture } = useUIStore();
+
   return (
-    <Stage width={1000} height={800}>
+    <Stage
+      width={metersToPixels(room.width) + metersToPixels(room.x) * 2}
+      height={metersToPixels(room.height) + metersToPixels(room.y) * 2}
+    >
       <Layer>
         {/* Room */}
         <Rect
@@ -47,36 +45,32 @@ export default function RoomCanvas() {
         {/* Grid lines - End */}
 
         {/* Furniture */}
-        <FurnitureItems
-          room={room}
-          items={items}
-          walls={walls}
-          addItem={addItem}
-          removeItem={removeItem}
-          setRoom={setRoom}
-          rotateItem={rotateItem}
-          updateItemPosition={updateItemPosition}
-          addWall={addWall}
-          removeWall={removeWall}
-          updateWallPosition={updateWallPosition}
-        />
+        {showFloorFurniture && (
+          <FurnitureItems
+            room={room}
+            items={items}
+            updateItemPosition={updateItemPosition}
+          />
+        )}
         {/* Furniture - End */}
 
         {/* Walls */}
         <WallItems
           room={room}
-          items={items}
           walls={walls}
-          addItem={addItem}
-          removeItem={removeItem}
-          setRoom={setRoom}
-          rotateItem={rotateItem}
-          updateItemPosition={updateItemPosition}
-          addWall={addWall}
-          removeWall={removeWall}
           updateWallPosition={updateWallPosition}
         />
         {/* Walls - End */}
+
+        {/* Hanging Furniture */}
+        {showHangingFurniture && (
+          <HangingFurnitureItems
+            room={room}
+            hangingItems={hangingItems}
+            updateHangingItemPosition={updateHangingItemPosition}
+          />
+        )}
+        {/* Hanging Furniture - End */}
       </Layer>
     </Stage>
   );

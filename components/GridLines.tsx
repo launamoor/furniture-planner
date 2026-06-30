@@ -32,7 +32,7 @@ export default function GridLines({ room }: { room: Room }) {
     while (
       canvasVerticalStart - metersToPixels(room.x) <
         metersToPixels(room.width) &&
-      canvasHorizontalEnd - metersToPixels(room.x) < metersToPixels(room.width)
+      canvasVerticalEnd - metersToPixels(room.x) < metersToPixels(room.width)
     ) {
       verticalLines.push([
         canvasVerticalStart,

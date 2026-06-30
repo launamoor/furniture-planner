@@ -8,7 +8,17 @@ export type FurnitureItem = {
   y: number;
   width: number;
   height: number;
-  rotation: number;
+  colour: string;
+  name: string;
+  woodType?: string;
+};
+
+export type HangingFurnitureItem = {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
   colour: string;
   name: string;
   woodType?: string;
@@ -34,12 +44,17 @@ export type RoomStore = {
   // Blueprint
   room: Room;
   items: FurnitureItem[]; // Array of Furniture Items
+  hangingItems: HangingFurnitureItem[];
   walls: Wall[];
   setRoom: (width: number, height: number) => void;
   addItem: (item: FurnitureItem) => void; // Function - Adds the Furniture Item to the Store
+  addHangingItem: (item: HangingFurnitureItem) => void;
+  removeHangingItem: (id: string) => void;
   rotateItem: (id: string) => void; // Function - Rotate the item
+  rotateHangingItem: (id: string) => void;
   removeItem: (id: string) => void; // Function. Removes the item
   updateItemPosition: (id: string, x: number, y: number) => void; // Function - updates the Furniture Item's position
+  updateHangingItemPosition: (id: string, x: number, y: number) => void;
   addWall: (wall: Wall) => void;
   removeWall: (id: string) => void;
   updateWallPosition: (id: string, x: number, y: number) => void;
@@ -54,10 +69,14 @@ export const useRoomStore = create<RoomStore>((set) => ({
     height: 5.6,
   },
   items: [],
+  hangingItems: [],
   walls: [],
   setRoom: (width: number, height: number) =>
     set((state) => ({
       room: { ...state.room, width, height },
+      walls: [],
+      items: [],
+      hangingItems: [],
     })),
   addItem: (item) =>
     set((state) => {
@@ -72,13 +91,36 @@ export const useRoomStore = create<RoomStore>((set) => ({
 
       return { items: [...state.items, newItem] };
     }),
+  addHangingItem: (hangingItem) =>
+    set((state) => {
+      if (state.hangingItems.length >= 50) return state;
+
+      const newHangingItem: HangingFurnitureItem = {
+        ...hangingItem,
+        id: crypto.randomUUID(),
+        x: state.room.width / 2 - hangingItem.width / 2,
+        y: state.room.height / 2 - hangingItem.height / 2,
+      };
+
+      return { hangingItems: [...state.hangingItems, newHangingItem] };
+    }),
   removeItem: (id: string) =>
     set((state) => ({
       items: [...state.items.filter((item) => item.id !== id)],
     })),
+  removeHangingItem: (id: string) =>
+    set((state) => ({
+      hangingItems: [...state.hangingItems.filter((item) => item.id !== id)],
+    })),
   updateItemPosition: (id, x, y) =>
     set((state) => ({
       items: state.items.map((item) =>
+        item.id === id ? { ...item, x, y } : item,
+      ),
+    })),
+  updateHangingItemPosition: (id, x, y) =>
+    set((state) => ({
+      hangingItems: state.hangingItems.map((item) =>
         item.id === id ? { ...item, x, y } : item,
       ),
     })),
@@ -100,6 +142,32 @@ export const useRoomStore = create<RoomStore>((set) => ({
               ),
             }
           : item,
+      ),
+    })),
+  rotateHangingItem: (id) =>
+    set((state) => ({
+      hangingItems: state.hangingItems.map((hangingItem) =>
+        hangingItem.id === id
+          ? {
+              ...hangingItem,
+              width: hangingItem.height,
+              height: hangingItem.width,
+              x: Math.min(
+                Math.max(
+                  hangingItem.x + (hangingItem.width - hangingItem.height) / 2,
+                  0,
+                ),
+                state.room.width - hangingItem.height,
+              ),
+              y: Math.min(
+                Math.max(
+                  hangingItem.y + (hangingItem.height - hangingItem.width) / 2,
+                  0,
+                ),
+                state.room.height - hangingItem.width,
+              ),
+            }
+          : hangingItem,
       ),
     })),
   addWall: (wall) =>

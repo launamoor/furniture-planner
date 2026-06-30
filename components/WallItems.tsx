@@ -1,14 +1,20 @@
-import type { RoomStore } from "@/store/roomStore";
+import type { Room, Wall, RoomStore } from "@/store/roomStore";
 import { WALL_THICKNESS } from "@/utils/scale";
-import { Rect, Line, Group, Text } from "react-konva";
+import { Rect, Group, Text } from "react-konva";
 import { metersToPixels, pixelsToMeters, snapToGrid } from "@/utils/scale";
 import Konva from "konva";
+
+type WallItemsProps = {
+  room: Room;
+  walls: Wall[];
+  updateWallPosition: RoomStore["updateWallPosition"];
+};
 
 export default function WallItems({
   room,
   walls,
   updateWallPosition,
-}: RoomStore) {
+}: WallItemsProps) {
   const handleCursor = (
     e: Konva.KonvaEventObject<MouseEvent>,
     cursor: string,
@@ -72,7 +78,7 @@ export default function WallItems({
                 ? metersToPixels(wall.length)
                 : metersToPixels(WALL_THICKNESS)
             }
-            fill={"#9c8672"}
+            fill={"#2c2419"}
           />
           <Text
             x={

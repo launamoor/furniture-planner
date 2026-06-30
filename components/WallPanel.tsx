@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRoomStore, Wall } from "@/store/roomStore";
 import { useUIStore } from "@/store/uiStore";
 import RoomCanvas from "./RoomCanvas";
+import CanvasVisibilityControls from "@/components/CanvasVisibilityControls";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -145,7 +146,13 @@ function WallRow({
 
 export default function WallPanel() {
   const { room, walls, addWall, removeWall } = useRoomStore();
-  const { setStep } = useUIStore();
+  const {
+    showFloorFurniture,
+    showHangingFurniture,
+    toggleFloorFurniture,
+    toggleHangingFurniture,
+    setStep,
+  } = useUIStore();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [error, setError] = useState<string | null>(null);
 
@@ -189,13 +196,23 @@ export default function WallPanel() {
     <div
       style={{
         display: "flex",
+        flexDirection: `${room.width <= 5 ? "row" : "column"}`,
         alignItems: "center",
         justifyContent: "center",
+        gap: "1rem",
+        minHeight: "70vh",
+        width: "50vw",
       }}
     >
-      <aside
+      <CanvasVisibilityControls
+        showFloorFurniture={showFloorFurniture}
+        showHangingFurniture={showHangingFurniture}
+        onToggleFloor={toggleFloorFurniture}
+        onToggleHanging={toggleHangingFurniture}
+      />
+      <div
         style={{
-          width: "230px",
+          width: `${room.width > 5 ? "100%" : "50%"}`,
           flexShrink: 0,
           background: "#f5f1eb",
           borderRight: "1px solid #e5e0d8",
@@ -205,6 +222,7 @@ export default function WallPanel() {
           overflow: "hidden",
           fontFamily:
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          order: `${room.width > 5 ? "1" : "0"}`,
         }}
       >
         {/* ── Header ── */}
@@ -364,39 +382,7 @@ export default function WallPanel() {
             display: "flex",
             flexDirection: "column",
           }}
-        >
-          {walls.length === 0 ? (
-            <p
-              style={{
-                fontSize: "11px",
-                color: "#b0a898",
-                textAlign: "center",
-                padding: "20px 14px",
-                lineHeight: 1.5,
-              }}
-            >
-              Jeszcze nie dodano żadnych ścian. Dodaj ściany lub kontynuuj.
-            </p>
-          ) : (
-            <>
-              <span
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  color: "#9c8672",
-                  textTransform: "uppercase",
-                  padding: "0 10px 8px",
-                }}
-              >
-                Ściany · {walls.length}
-              </span>
-              {walls.map((wall) => (
-                <WallRow key={wall.id} wall={wall} onRemove={removeWall} />
-              ))}
-            </>
-          )}
-        </div>
+        ></div>
 
         {/* ── Footer — continue ── */}
         <div
@@ -449,7 +435,38 @@ export default function WallPanel() {
             ← Wróć do rozmiaru pomieszczenia
           </button>
         </div>
-      </aside>
+        {walls.length === 0 ? (
+          <p
+            style={{
+              fontSize: "11px",
+              color: "#b0a898",
+              textAlign: "center",
+              padding: "20px 14px",
+              lineHeight: 1.5,
+            }}
+          >
+            Jeszcze nie dodano żadnych ścian. Dodaj ściany lub kontynuuj.
+          </p>
+        ) : (
+          <>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                color: "#9c8672",
+                textTransform: "uppercase",
+                padding: "0 10px 8px",
+              }}
+            >
+              Ściany · {walls.length}
+            </span>
+            {walls.map((wall) => (
+              <WallRow key={wall.id} wall={wall} onRemove={removeWall} />
+            ))}
+          </>
+        )}
+      </div>
       <RoomCanvas />
     </div>
   );

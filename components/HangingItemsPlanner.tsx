@@ -1,10 +1,10 @@
 import RoomCanvas from "./RoomCanvas";
-import FurniturePanel from "./FurniturePanel";
+import HangingFurniturePanel from "./HangingFurniturePanel";
 import { useRoomStore } from "@/store/roomStore";
-import CanvasVisibilityControls from "@/components/CanvasVisibilityControls";
 import { useUIStore } from "@/store/uiStore";
+import CanvasVisibilityControls from "./CanvasVisibilityControls";
 
-export default function RoomPlanner() {
+export default function HangingItemsPlanner() {
   const { room } = useRoomStore();
   const {
     showFloorFurniture,
@@ -24,7 +24,7 @@ export default function RoomPlanner() {
         width: "50vw",
       }}
     >
-      <FurniturePanel />
+      <HangingFurniturePanel />
       <CanvasVisibilityControls
         showFloorFurniture={showFloorFurniture}
         showHangingFurniture={showHangingFurniture}

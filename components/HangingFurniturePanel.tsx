@@ -44,31 +44,6 @@ const labelStyle: React.CSSProperties = {
   letterSpacing: "0.02em",
 };
 
-// ─── Generate random color ────────────────────────────────────────────────────
-
-const generateRandomBrownColor = (): string => {
-  // AI GENERATED
-  // 1. Keep the warm orange/brown hue spectrum
-  const h: number = Math.floor(Math.random() * (45 - 20 + 1)) + 20;
-
-  // 2. Keep saturation moderate so it looks like beige/tan instead of bright pastel orange
-  const s: number = (Math.floor(Math.random() * (50 - 25 + 1)) + 25) / 100;
-
-  // 3. Force high lightness (70% to 85%) to guarantee high contrast with black text
-  const l: number = (Math.floor(Math.random() * (85 - 70 + 1)) + 70) / 100;
-
-  const a: number = s * Math.min(l, 1 - l);
-  const f = (n: number): string => {
-    const k: number = (n + h / 30) % 12;
-    const color: number = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-    return Math.round(255 * color)
-      .toString(16)
-      .padStart(2, "0");
-  };
-
-  return `#${f(0)}${f(8)}${f(4)}`;
-};
-
 // ─── PlacedItemRow ────────────────────────────────────────────────────────────
 
 function PlacedItemRow({
@@ -172,8 +147,9 @@ function PlacedItemRow({
 
 // ─── FurniturePanel ───────────────────────────────────────────────────────────
 
-export default function FurniturePanel() {
-  const { items, addItem, removeItem, rotateItem } = useRoomStore();
+export default function HangingFurniturePanel() {
+  const { hangingItems, addHangingItem, removeHangingItem, rotateHangingItem } =
+    useRoomStore();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const { setStep } = useUIStore();
@@ -209,13 +185,13 @@ export default function FurniturePanel() {
   const handleAdd = () => {
     if (!validate()) return;
 
-    addItem({
+    addHangingItem({
       id: crypto.randomUUID(),
       name: form.name.trim(),
       width: Number(form.width) / 100, // cm → metres
       height: Number(form.depth) / 100, // cm → metres
       woodType: form.woodType.trim() || undefined,
-      colour: generateRandomBrownColor(),
+      colour: "#ffffff90",
       x: 0,
       y: 0,
     });
@@ -257,7 +233,7 @@ export default function FurniturePanel() {
             textTransform: "uppercase",
           }}
         >
-          Dodaj Mebel
+          Dodaj Mebel Wiszący
         </span>
 
         {/* Name */}
@@ -356,33 +332,10 @@ export default function FurniturePanel() {
           style={{
             padding: "12px 14px",
             borderTop: "1px solid #e5e0d8",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
           }}
         >
           <button
-            onClick={() => setStep(4)}
-            style={{
-              width: "100%",
-              padding: "9px",
-              background: "#2c2419",
-              color: "#f5f1eb",
-              border: "none",
-              borderRadius: "5px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer",
-              letterSpacing: "0.03em",
-              transition: "background 0.15s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#3d3425")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "#2c2419")}
-          >
-            Kontynuuj do mebli wiszących →
-          </button>
-          <button
-            onClick={() => setStep(2)}
+            onClick={() => setStep(3)}
             style={{
               width: "100%",
               padding: "7px",
@@ -401,12 +354,12 @@ export default function FurniturePanel() {
               (e.currentTarget.style.borderColor = "#e5e0d8")
             }
           >
-            ← Wroc do edycji scian
+            ← Wroc do edycji mebli
           </button>
         </div>
       </div>
 
-      {/* ── Placed items list ── */}
+      {/* ── Placed hanging items list ── */}
       <div
         style={{
           flex: 1,
@@ -416,7 +369,7 @@ export default function FurniturePanel() {
           flexDirection: "column",
         }}
       >
-        {items.length === 0 ? (
+        {hangingItems.length === 0 ? (
           <p
             style={{
               fontSize: "11px",
@@ -440,14 +393,14 @@ export default function FurniturePanel() {
                 padding: "0 10px 8px",
               }}
             >
-              W pomieszczeniu · {items.length}
+              W pomieszczeniu · {hangingItems.length}
             </span>
-            {items.map((item) => (
+            {hangingItems.map((item) => (
               <PlacedItemRow
                 key={item.id}
                 item={item}
-                onRemove={removeItem}
-                onRotate={rotateItem}
+                onRemove={removeHangingItem}
+                onRotate={rotateHangingItem}
               />
             ))}
           </>

@@ -1,11 +1,25 @@
 import { create } from "zustand";
 
 export type UIStore = {
-  step: 1 | 2 | 3;
-  setStep: (step: 1 | 2 | 3) => void;
+  step: 1 | 2 | 3 | 4;
+  setStep: (step: 1 | 2 | 3 | 4) => void;
+  showFloorFurniture: boolean;
+  showHangingFurniture: boolean;
+  toggleFloorFurniture: () => void;
+  toggleHangingFurniture: () => void;
 };
 
 export const useUIStore = create<UIStore>((set) => ({
   step: 1,
   setStep: (step) => set({ step }),
+  showFloorFurniture: true,
+  showHangingFurniture: true,
+  toggleFloorFurniture: () =>
+    set((state) => ({
+      showFloorFurniture: !state.showFloorFurniture,
+    })),
+  toggleHangingFurniture: () =>
+    set((state) => ({
+      showHangingFurniture: !state.showHangingFurniture,
+    })),
 }));

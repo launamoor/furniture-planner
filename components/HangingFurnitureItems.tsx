@@ -1,19 +1,19 @@
-import type { Room, FurnitureItem, RoomStore } from "@/store/roomStore";
+import type { Room, HangingFurnitureItem, RoomStore } from "@/store/roomStore";
 import { Rect, Line, Group, Text } from "react-konva";
 import { metersToPixels, pixelsToMeters, snapToGrid } from "@/utils/scale";
 import Konva from "konva";
 
-type FurnitureItemsProps = {
+type HangingFurnitureItemsProps = {
   room: Room;
-  items: FurnitureItem[];
-  updateItemPosition: RoomStore["updateItemPosition"];
+  hangingItems: HangingFurnitureItem[];
+  updateHangingItemPosition: RoomStore["updateHangingItemPosition"];
 };
 
-export default function FurnitureItems({
+export default function HangingFurnitureItems({
   room,
-  items,
-  updateItemPosition,
-}: FurnitureItemsProps) {
+  hangingItems,
+  updateHangingItemPosition,
+}: HangingFurnitureItemsProps) {
   const handleCursor = (
     e: Konva.KonvaEventObject<MouseEvent>,
     cursor: string,
@@ -24,7 +24,7 @@ export default function FurnitureItems({
 
   return (
     <>
-      {items.map((item) => (
+      {hangingItems.map((item) => (
         <Group
           key={item.id}
           x={metersToPixels(room.x) + metersToPixels(item.x)}
@@ -51,7 +51,7 @@ export default function FurnitureItems({
 
             let collided = false;
 
-            items.forEach((otherItem) => {
+            hangingItems.forEach((otherItem) => {
               if (otherItem.id === item.id) return;
               const round = (n: number) => Math.round(n * 1000) / 1000; // round to millimetre precision
 
@@ -75,7 +75,7 @@ export default function FurnitureItems({
             } else {
               e.target.x(metersToPixels(snappedX) + roomX);
               e.target.y(metersToPixels(snappedY) + roomY);
-              updateItemPosition(item.id, snappedX, snappedY);
+              updateHangingItemPosition(item.id, snappedX, snappedY);
             }
           }}
         >

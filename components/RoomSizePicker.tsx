@@ -31,7 +31,8 @@ export default function RoomSizePicker() {
   return (
     <div
       style={{
-        minHeight: "80vh",
+        minHeight: "70vh",
+        width: "50vw",
         background: "#faf8f5",
         display: "flex",
         flexDirection: "column",
