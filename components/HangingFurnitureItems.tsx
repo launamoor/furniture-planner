@@ -2,6 +2,7 @@ import type { Room, HangingFurnitureItem, RoomStore } from "@/store/roomStore";
 import { Rect, Line, Group, Text } from "react-konva";
 import { metersToPixels, pixelsToMeters, snapToGrid } from "@/utils/scale";
 import Konva from "konva";
+import { useUIStore } from "@/store/uiStore";
 
 type HangingFurnitureItemsProps = {
   room: Room;
@@ -22,6 +23,8 @@ export default function HangingFurnitureItems({
     if (stage) stage.container().style.cursor = cursor;
   };
 
+  const { setSelectedItem } = useUIStore();
+
   return (
     <>
       {hangingItems.map((item) => (
@@ -29,6 +32,7 @@ export default function HangingFurnitureItems({
           key={item.id}
           x={metersToPixels(room.x) + metersToPixels(item.x)}
           y={metersToPixels(room.y) + metersToPixels(item.y)}
+          onClick={() => setSelectedItem(item.id, "hanging")}
           onMouseEnter={(e) => handleCursor(e, "grab")}
           onMouseLeave={(e) => handleCursor(e, "default")}
           onMouseDown={(e) => handleCursor(e, "grabbing")}

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { WALL_THICKNESS } from "@/utils/scale";
+import { metersToPixels, WALL_THICKNESS } from "@/utils/scale";
 
 export type FurnitureItem = {
   // Blueprint
@@ -11,6 +11,8 @@ export type FurnitureItem = {
   colour: string;
   name: string;
   woodType?: string;
+  heightCm: number;
+  floorOffsetCm?: number;
 };
 
 export type HangingFurnitureItem = {
@@ -22,6 +24,8 @@ export type HangingFurnitureItem = {
   colour: string;
   name: string;
   woodType?: string;
+  heightCm: number;
+  ceilingOffsetCm?: number;
 };
 
 export type Room = {
@@ -30,6 +34,7 @@ export type Room = {
   y: number;
   width: number;
   height: number;
+  roomHeightCm: number;
 };
 
 export type Wall = {
@@ -46,7 +51,8 @@ export type RoomStore = {
   items: FurnitureItem[]; // Array of Furniture Items
   hangingItems: HangingFurnitureItem[];
   walls: Wall[];
-  setRoom: (width: number, height: number) => void;
+  setRoom: (width: number, height: number, roomHeightCm: number) => void;
+  setRoomHeight: (roomHeightCm: number) => void;
   addItem: (item: FurnitureItem) => void; // Function - Adds the Furniture Item to the Store
   addHangingItem: (item: HangingFurnitureItem) => void;
   removeHangingItem: (id: string) => void;
@@ -67,6 +73,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     y: 0.2,
     width: 7.6,
     height: 5.6,
+    roomHeightCm: 2.5,
   },
   items: [],
   hangingItems: [],
@@ -78,6 +85,8 @@ export const useRoomStore = create<RoomStore>((set) => ({
       items: [],
       hangingItems: [],
     })),
+  setRoomHeight: (roomHeightCm: number) =>
+    set((state) => ({ room: { ...state.room, roomHeightCm } })),
   addItem: (item) =>
     set((state) => {
       if (state.items.length >= 50) return state;

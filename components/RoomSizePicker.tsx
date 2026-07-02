@@ -17,22 +17,25 @@ export default function RoomSizePicker() {
   const { setRoom } = useRoomStore();
   const { setStep } = useUIStore();
   const [selected, setSelected] = useState<string | null>(null);
+  const [roomHeight, setRoomHeight] = useState<number>(250);
+  const [selectedWidth, setSelectedWidth] = useState<number>(0);
+  const [selectedHeight, setSelectedHeight] = useState<number>(0);
 
   const handleSelect = (name: string, width: number, height: number) => {
     setSelected(name);
-    setRoom(width, height);
+    setSelectedWidth(width);
+    setSelectedHeight(height);
   };
 
   const handleContinue = () => {
     if (!selected) return;
+    setRoom(selectedWidth, selectedHeight, roomHeight);
     setStep(2);
   };
 
   return (
     <div
       style={{
-        minHeight: "70vh",
-        width: "50vw",
         background: "#faf8f5",
         display: "flex",
         flexDirection: "column",
@@ -59,7 +62,7 @@ export default function RoomSizePicker() {
             marginBottom: "12px",
           }}
         >
-          Krok 1 z 3
+          Krok 1 z 4
         </div>
         <h1
           style={{
@@ -187,6 +190,49 @@ export default function RoomSizePicker() {
             </button>
           );
         })}
+      </div>
+
+      {/* Room height input */}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "560px",
+          marginBottom: "24px",
+        }}
+      >
+        <label
+          style={{
+            display: "block",
+            fontSize: "12px",
+            fontWeight: 600,
+            color: "#7a6a5a",
+            marginBottom: "6px",
+            letterSpacing: "0.02em",
+          }}
+        >
+          Wysokość pomieszczenia (cm)
+        </label>
+        <input
+          type="number"
+          min="100"
+          placeholder="np. 250"
+          value={roomHeight}
+          onChange={(e) => setRoomHeight(Number(e.target.value))}
+          style={{
+            width: "100%",
+            padding: "10px 14px",
+            border: "2px solid #e5e0d8",
+            borderRadius: "8px",
+            fontSize: "14px",
+            color: "#2c2419",
+            background: "#fff",
+            boxSizing: "border-box",
+            outline: "none",
+            fontFamily: "inherit",
+          }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "#2c2419")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e0d8")}
+        />
       </div>
 
       {/* Continue button */}

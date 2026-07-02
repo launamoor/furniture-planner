@@ -11,6 +11,8 @@ type FormState = {
   width: string;
   depth: string;
   woodType: string;
+  heightCm: string;
+  ceilingOffsetCm: string;
 };
 
 const EMPTY_FORM: FormState = {
@@ -18,6 +20,8 @@ const EMPTY_FORM: FormState = {
   width: "",
   depth: "",
   woodType: "",
+  heightCm: "",
+  ceilingOffsetCm: "",
 };
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
@@ -98,8 +102,8 @@ function PlacedItemRow({
           {item.name}
         </div>
         <div style={{ fontSize: "10px", color: "#9c8672" }}>
-          {Math.round(item.width * 100)}cm × {Math.round(item.height * 100)}cm
-          {item.woodType ? ` · ${item.woodType}` : ""}
+          {Math.round(item.width * 100)}cm × {Math.round(item.height * 100)}cm ×{" "}
+          {item.heightCm}cm
         </div>
       </div>
 
@@ -178,6 +182,12 @@ export default function HangingFurniturePanel() {
       Number(form.depth) % 10 !== 0
     )
       next.depth = "Podaj głębokość do 10cm";
+    if (
+      !form.heightCm ||
+      isNaN(Number(form.heightCm)) ||
+      Number(form.heightCm) <= 0
+    )
+      next.heightCm = "Podaj wysokość";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -194,6 +204,10 @@ export default function HangingFurniturePanel() {
       colour: "#ffffff90",
       x: 0,
       y: 0,
+      heightCm: Number(form.heightCm),
+      ceilingOffsetCm: form.ceilingOffsetCm
+        ? Number(form.ceilingOffsetCm)
+        : undefined,
     });
 
     setForm(EMPTY_FORM);
@@ -294,6 +308,39 @@ export default function HangingFurniturePanel() {
                 {errors.depth}
               </span>
             )}
+          </div>
+          <div style={{ flex: 1 }}>
+            <label style={labelStyle}>Wysokość (cm)</label>
+            <input
+              style={{
+                ...inputStyle,
+                borderColor: errors.heightCm ? "#c0392b" : "#e5e0d8",
+              }}
+              type="number"
+              min="1"
+              placeholder="60"
+              value={form.heightCm}
+              onChange={set("heightCm")}
+            />
+            {errors.heightCm && (
+              <span style={{ fontSize: "10px", color: "#c0392b" }}>
+                {errors.heightCm}
+              </span>
+            )}
+          </div>
+          {/* Ceiling offset */}
+          <div>
+            <label style={labelStyle}>
+              Odległość od sufitu (cm, opcjonalnie)
+            </label>
+            <input
+              style={inputStyle}
+              type="number"
+              min="0"
+              placeholder="0"
+              value={form.ceilingOffsetCm}
+              onChange={set("ceilingOffsetCm")}
+            />
           </div>
         </div>
 

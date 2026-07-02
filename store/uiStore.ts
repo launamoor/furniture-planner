@@ -7,6 +7,12 @@ export type UIStore = {
   showHangingFurniture: boolean;
   toggleFloorFurniture: () => void;
   toggleHangingFurniture: () => void;
+  selectedItemId: string | null;
+  selectedItemType: "floor" | "hanging" | "wall" | null;
+  setSelectedItem: (
+    id: string | null,
+    type: "floor" | "hanging" | "wall" | null,
+  ) => void;
 };
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -22,4 +28,8 @@ export const useUIStore = create<UIStore>((set) => ({
     set((state) => ({
       showHangingFurniture: !state.showHangingFurniture,
     })),
+  selectedItemId: null,
+  selectedItemType: null,
+  setSelectedItem: (id, type) =>
+    set({ selectedItemId: id, selectedItemType: type }),
 }));

@@ -196,23 +196,21 @@ export default function WallPanel() {
     <div
       style={{
         display: "flex",
-        flexDirection: `${room.width <= 5 ? "row" : "column"}`,
         alignItems: "center",
         justifyContent: "center",
         gap: "1rem",
-        minHeight: "70vh",
-        width: "50vw",
+        width: "100%",
       }}
     >
-      <CanvasVisibilityControls
+      {/* <CanvasVisibilityControls
         showFloorFurniture={showFloorFurniture}
         showHangingFurniture={showHangingFurniture}
         onToggleFloor={toggleFloorFurniture}
         onToggleHanging={toggleHangingFurniture}
-      />
+      /> */}
       <div
         style={{
-          width: `${room.width > 5 ? "100%" : "50%"}`,
+          width: "100%",
           flexShrink: 0,
           background: "#f5f1eb",
           borderRight: "1px solid #e5e0d8",
@@ -222,7 +220,6 @@ export default function WallPanel() {
           overflow: "hidden",
           fontFamily:
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-          order: `${room.width > 5 ? "1" : "0"}`,
         }}
       >
         {/* ── Header ── */}
@@ -467,7 +464,6 @@ export default function WallPanel() {
           </>
         )}
       </div>
-      <RoomCanvas />
     </div>
   );
 }

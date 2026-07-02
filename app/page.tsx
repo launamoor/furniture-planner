@@ -5,6 +5,7 @@ import RoomSizePicker from "@/components/RoomSizePicker";
 import WallPanel from "@/components/WallPanel";
 import HangingItemsPlanner from "@/components/HangingItemsPlanner";
 import CanvasVisibilityControls from "@/components/CanvasVisibilityControls";
+import AppShell from "@/components/AppShell";
 
 export default function Home() {
   const {
@@ -24,7 +25,7 @@ export default function Home() {
 
   return (
     <>
-      <CanvasVisibilityControls
+      {/* <CanvasVisibilityControls
         showFloorFurniture={showFloorFurniture}
         showHangingFurniture={showHangingFurniture}
         onToggleFloor={toggleFloorFurniture}
@@ -32,7 +33,8 @@ export default function Home() {
       />
       <div className="h-full w-full flex items-center justify-center mt-[10rem]">
         {renderStep()}
-      </div>
+      </div> */}
+      <AppShell />
     </>
   );
 }
