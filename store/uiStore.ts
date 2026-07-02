@@ -13,6 +13,8 @@ export type UIStore = {
     id: string | null,
     type: "floor" | "hanging" | "wall" | null,
   ) => void;
+  selectedWall: "left" | "right" | "top" | "bottom" | null;
+  setSelectedWall: (wall: "left" | "right" | "top" | "bottom" | null) => void;
 };
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -32,4 +34,6 @@ export const useUIStore = create<UIStore>((set) => ({
   selectedItemType: null,
   setSelectedItem: (id, type) =>
     set({ selectedItemId: id, selectedItemType: type }),
+  selectedWall: null,
+  setSelectedWall: (wall) => set({ selectedWall: wall }),
 }));

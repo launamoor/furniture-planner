@@ -169,7 +169,7 @@ export default function WallPanel() {
     const max = orientation === "horizontal" ? room.width : room.height;
 
     if (!form.length || isNaN(len) || len <= 0) {
-      setError("Enter a valid length");
+      setError("Wprowadź odpowiednią długość");
       return;
     }
     if (len % 10 !== 0) {

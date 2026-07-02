@@ -3,6 +3,7 @@
 import { useRoomStore } from "@/store/roomStore";
 import { useUIStore } from "@/store/uiStore";
 import { metersToPixels } from "@/utils/scale";
+import WallSelector from "./WallSelector";
 
 // ─── Section header ───────────────────────────────────────────────────────────
 
@@ -224,6 +225,7 @@ export default function RightSidebar() {
           </div>
         )}
       </div>
+      <WallSelector />
     </aside>
   );
 }
