@@ -4,6 +4,8 @@ import { useRoomStore } from "@/store/roomStore";
 import { useUIStore } from "@/store/uiStore";
 import { metersToPixels } from "@/utils/scale";
 import WallSelector from "./WallSelector";
+import { getItemsOnWall } from "@/utils/elevationUtils";
+import ElevationCanvas from "./ElevationCanvas";
 
 // ─── Section header ───────────────────────────────────────────────────────────
 
@@ -79,7 +81,7 @@ function Divider() {
 
 export default function RightSidebar() {
   const { room, items, hangingItems } = useRoomStore();
-  const { selectedItemId, selectedItemType } = useUIStore();
+  const { selectedItemId, selectedItemType, selectedWall } = useUIStore();
 
   // Find selected item across both arrays
   const selectedItem =
@@ -88,6 +90,9 @@ export default function RightSidebar() {
       : selectedItemType === "hanging"
         ? hangingItems.find((i) => i.id === selectedItemId)
         : null;
+
+  const itemsOnWall =
+    selectedWall && getItemsOnWall(selectedWall, items, hangingItems, room);
 
   return (
     <aside
@@ -114,10 +119,7 @@ export default function RightSidebar() {
           label="Głębokość"
           value={`${Math.round(room.height * 100)} cm`}
         />
-        <InfoRow
-          label="Wysokość"
-          value={`${metersToPixels(room.roomHeightCm)} cm`}
-        />
+        <InfoRow label="Wysokość" value={`${room.roomHeightCm} cm`} />
         <InfoRow
           label="Powierzchnia"
           value={`${(room.width * room.height).toFixed(2)} m²`}
@@ -226,6 +228,26 @@ export default function RightSidebar() {
         )}
       </div>
       <WallSelector />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          marginBottom: "2rem",
+        }}
+      >
+        {itemsOnWall && (
+          <ElevationCanvas
+            wall={selectedWall!}
+            room={room}
+            floorItems={itemsOnWall.floorItems}
+            hangingItems={itemsOnWall.hangingItems}
+            width={500}
+            height={200}
+          />
+        )}
+      </div>
     </aside>
   );
 }

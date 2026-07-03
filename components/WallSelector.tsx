@@ -5,7 +5,7 @@
 
 import { useUIStore } from "@/store/uiStore";
 
-type WallKey = "left" | "right" | "top" | "bottom";
+export type WallKey = "left" | "right" | "top" | "bottom";
 
 const WALL_LABELS: Record<WallKey, string> = {
   top: "Górna",

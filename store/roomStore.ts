@@ -73,7 +73,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     y: 0.2,
     width: 7.6,
     height: 5.6,
-    roomHeightCm: 2.5,
+    roomHeightCm: 250,
   },
   items: [],
   hangingItems: [],

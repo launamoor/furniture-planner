@@ -3,6 +3,7 @@ import { Rect, Line, Group, Text } from "react-konva";
 import { metersToPixels, pixelsToMeters, snapToGrid } from "@/utils/scale";
 import Konva from "konva";
 import { useUIStore } from "@/store/uiStore";
+import { round } from "@/utils/scale";
 
 type FurnitureItemsProps = {
   room: Room;
@@ -57,7 +58,6 @@ export default function FurnitureItems({
 
             items.forEach((otherItem) => {
               if (otherItem.id === item.id) return;
-              const round = (n: number) => Math.round(n * 1000) / 1000; // round to millimetre precision
 
               const leftClear =
                 round(snappedX + item.width) <= round(otherItem.x);
