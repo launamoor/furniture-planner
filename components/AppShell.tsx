@@ -353,19 +353,26 @@ export default function AppShell() {
                 <RoomCanvas />
                 <WallSelector />
                 {itemsOnWall && (
-                  <ElevationCanvas
-                    wall={selectedWall!}
-                    room={room}
-                    floorItems={itemsOnWall.floorItems}
-                    hangingItems={itemsOnWall.hangingItems}
-                    wallsOnWall={wallsOnWall || []}
-                    width={
-                      selectedWall === "top" || selectedWall === "bottom"
-                        ? metersToPixels(room.width)
-                        : metersToPixels(room.height)
-                    }
-                    height={room.roomHeightCm}
-                  />
+                  <div
+                    style={{
+                      backgroundColor: "red",
+                      textAlign: "center",
+                    }}
+                  >
+                    <ElevationCanvas
+                      wall={selectedWall!}
+                      room={room}
+                      floorItems={itemsOnWall.floorItems}
+                      hangingItems={itemsOnWall.hangingItems}
+                      wallsOnWall={wallsOnWall || []}
+                      width={
+                        selectedWall === "top" || selectedWall === "bottom"
+                          ? metersToPixels(room.width)
+                          : metersToPixels(room.height)
+                      }
+                      height={room.roomHeightCm}
+                    />
+                  </div>
                 )}
               </div>
             </main>

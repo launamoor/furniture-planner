@@ -63,7 +63,7 @@ export default function ElevationCanvas({
   width,
   height,
 }: ElevationCanvasProps) {
-  const PADDING = 20; // px padding inside canvas
+  const PADDING = 0; // px padding
 
   const roomHeightM = room.roomHeightCm / 100;
   const wallLengthM = getWallLengthM(wall, room);
@@ -271,7 +271,7 @@ export default function ElevationCanvas({
         <Text
           x={0}
           y={originY}
-          width={PADDING - 4}
+          width={PADDING + 30}
           height={roomPxHeight}
           text={`${room.roomHeightCm}cm`}
           fontSize={8}
@@ -285,7 +285,7 @@ export default function ElevationCanvas({
         {/* ── Width label (bottom) ── */}
         <Text
           x={originX}
-          y={originY + roomPxHeight + 4}
+          y={originY + roomPxHeight - 10}
           width={roomPxWidth}
           text={`${Math.round(wallLengthM * 100)}cm`}
           fontSize={8}
