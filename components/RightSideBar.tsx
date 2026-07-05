@@ -205,18 +205,8 @@ export default function RightSidebar() {
                 />
               )}
 
-            {/* {selectedItemType === "hanging" &&
-              "ceilingOffsetCm" in selectedItem &&
-              selectedItem.ceilingOffsetCm !== undefined && (
-                <InfoRow
-                  label="Od sufitu"
-                  value={`${selectedItem.ceilingOffsetCm} cm`}
-                />
-              )} */}
-
             {selectedItemType === "hanging" &&
-              "ceilingOffsetCm" in selectedItem &&
-              selectedItem.ceilingOffsetCm !== undefined && (
+              "ceilingOffsetCm" in selectedItem && (
                 <div style={{ padding: "5px 14px" }}>
                   <div
                     style={{
@@ -231,7 +221,7 @@ export default function RightSidebar() {
                     </span>
                     <input
                       type="number"
-                      value={selectedItem.ceilingOffsetCm}
+                      value={selectedItem.ceilingOffsetCm ?? 0}
                       onChange={(e) => {
                         const newOffset = Number(e.target.value);
                         if (Number.isNaN(newOffset)) return;
