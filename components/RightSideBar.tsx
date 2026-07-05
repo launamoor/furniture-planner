@@ -2,10 +2,9 @@
 
 import { useRoomStore } from "@/store/roomStore";
 import { useUIStore } from "@/store/uiStore";
-import { metersToPixels } from "@/utils/scale";
-import WallSelector from "./WallSelector";
 import { getItemsOnWall } from "@/utils/elevationUtils";
-import ElevationCanvas from "./ElevationCanvas";
+import { useState } from "react";
+import { verticalRangesOverlap } from "@/utils/collision";
 
 // ─── Section header ───────────────────────────────────────────────────────────
 
@@ -80,8 +79,10 @@ function Divider() {
 // ─── RightSidebar ─────────────────────────────────────────────────────────────
 
 export default function RightSidebar() {
-  const { room, items, hangingItems } = useRoomStore();
+  const { room, items, hangingItems, updateHangingItemOffset } = useRoomStore();
   const { selectedItemId, selectedItemType, selectedWall } = useUIStore();
+
+  const [offsetError, setOffsetError] = useState<string | null>(null);
 
   // Find selected item across both arrays
   const selectedItem =
@@ -204,13 +205,86 @@ export default function RightSidebar() {
                 />
               )}
 
-            {selectedItemType === "hanging" &&
+            {/* {selectedItemType === "hanging" &&
               "ceilingOffsetCm" in selectedItem &&
               selectedItem.ceilingOffsetCm !== undefined && (
                 <InfoRow
                   label="Od sufitu"
                   value={`${selectedItem.ceilingOffsetCm} cm`}
                 />
+              )} */}
+
+            {selectedItemType === "hanging" &&
+              "ceilingOffsetCm" in selectedItem &&
+              selectedItem.ceilingOffsetCm !== undefined && (
+                <div style={{ padding: "5px 14px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <span style={{ fontSize: "11px", color: "#7a6a5a" }}>
+                      Od sufitu
+                    </span>
+                    <input
+                      type="number"
+                      value={selectedItem.ceilingOffsetCm}
+                      onChange={(e) => {
+                        const newOffset = Number(e.target.value);
+                        if (Number.isNaN(newOffset)) return;
+
+                        if (
+                          newOffset < 0 ||
+                          newOffset + selectedItem.heightCm > room.roomHeightCm
+                        ) {
+                          setOffsetError("Poza zasięgiem pomieszczenia");
+                          return;
+                        }
+
+                        const collision = hangingItems.some((other) => {
+                          if (other.id === selectedItem.id) return false;
+                          const footprintOverlap =
+                            selectedItem.x < other.x + other.width &&
+                            other.x < selectedItem.x + selectedItem.width &&
+                            selectedItem.y < other.y + other.height &&
+                            other.y < selectedItem.y + selectedItem.height;
+                          if (!footprintOverlap) return false;
+                          return verticalRangesOverlap(
+                            newOffset,
+                            selectedItem.heightCm,
+                            other.ceilingOffsetCm ?? 0,
+                            other.heightCm,
+                          );
+                        });
+
+                        if (collision) {
+                          setOffsetError("Kolizja z innym meblem");
+                          return;
+                        }
+                        setOffsetError(null);
+                        updateHangingItemOffset(selectedItem.id, newOffset);
+                      }}
+                      style={{
+                        width: "60px",
+                        fontSize: "12px",
+                        fontWeight: 600,
+                        textAlign: "right",
+                        border: "1px solid #999",
+                        borderRadius: "4px",
+                        padding: "2px 6px",
+                        backgroundColor: "#faf8f5",
+                      }}
+                    />
+                  </div>
+                  {offsetError && (
+                    <span style={{ fontSize: "10px", color: "#b5442e" }}>
+                      {offsetError}
+                    </span>
+                  )}
+                </div>
               )}
 
             {/* Position in room */}

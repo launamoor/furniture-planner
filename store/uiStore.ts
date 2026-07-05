@@ -34,6 +34,6 @@ export const useUIStore = create<UIStore>((set) => ({
   selectedItemType: null,
   setSelectedItem: (id, type) =>
     set({ selectedItemId: id, selectedItemType: type }),
-  selectedWall: null,
+  selectedWall: "top",
   setSelectedWall: (wall) => set({ selectedWall: wall }),
 }));

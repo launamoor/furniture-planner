@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRoomStore, FurnitureItem } from "@/store/roomStore";
 import { useUIStore } from "@/store/uiStore";
+import { metersToPixels } from "@/utils/scale";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -212,6 +213,12 @@ export default function FurniturePanel() {
       Number(form.heightCm) <= 0
     )
       next.heightCm = "Podaj wysokość";
+    if (Number(form.heightCm) > Number(room.roomHeightCm))
+      next.heightCm = `Wysokość musi być ${room.roomHeightCm}cm lub niższa`;
+    if (Number(form.depth) > Number(metersToPixels(room.height)))
+      next.depth = `Głębokość musi być ${metersToPixels(room.height)}cm lub niższa`;
+    if (Number(form.width) > Number(metersToPixels(room.width)))
+      next.width = `Szerokość musi być ${metersToPixels(room.width)}cm lub niższa`;
     setErrors(next);
     return Object.keys(next).length === 0;
   };

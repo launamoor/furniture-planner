@@ -9,3 +9,12 @@ export function rectsOverlap(a: Rect, b: Rect): boolean {
   const bottomClear = round(a.y) >= round(b.y + b.height);
   return !(leftClear || rightClear || topClear || bottomClear);
 }
+
+export function verticalRangesOverlap(
+  aOffset: number,
+  aHeight: number,
+  bOffset: number,
+  bHeight: number,
+): boolean {
+  return aOffset < bOffset + bHeight && bOffset < aOffset + aHeight;
+}

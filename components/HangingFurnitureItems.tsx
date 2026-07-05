@@ -1,8 +1,9 @@
 import type { Room, HangingFurnitureItem, RoomStore } from "@/store/roomStore";
 import { Rect, Line, Group, Text } from "react-konva";
-import { metersToPixels, pixelsToMeters, snapToGrid } from "@/utils/scale";
+import { metersToPixels, pixelsToMeters, round, snapToGrid } from "@/utils/scale";
 import Konva from "konva";
 import { useUIStore } from "@/store/uiStore";
+import { verticalRangesOverlap } from "@/utils/collision";
 
 type HangingFurnitureItemsProps = {
   room: Room;
@@ -57,7 +58,6 @@ export default function HangingFurnitureItems({
 
             hangingItems.forEach((otherItem) => {
               if (otherItem.id === item.id) return;
-              const round = (n: number) => Math.round(n * 1000) / 1000; // round to millimetre precision
 
               const leftClear =
                 round(snappedX + item.width) <= round(otherItem.x);
@@ -68,7 +68,16 @@ export default function HangingFurnitureItems({
               const bottomClear =
                 round(snappedY) >= round(otherItem.y + otherItem.height);
 
-              if (!leftClear && !rightClear && !topClear && !bottomClear) {
+              const footprintOverlap =
+                !leftClear && !rightClear && !topClear && !bottomClear;
+              const heightOverlap = verticalRangesOverlap(
+                item.ceilingOffsetCm ?? 0,
+                item.heightCm,
+                otherItem.ceilingOffsetCm ?? 0,
+                otherItem.heightCm,
+              );
+
+              if (footprintOverlap && heightOverlap) {
                 collided = true;
               }
             });

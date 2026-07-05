@@ -64,6 +64,7 @@ export type RoomStore = {
   addWall: (wall: Wall) => void;
   removeWall: (id: string) => void;
   updateWallPosition: (id: string, x: number, y: number) => void;
+  updateHangingItemOffset: (id: string, ceilingOffsetCm: number) => void;
 };
 
 export const useRoomStore = create<RoomStore>((set) => ({
@@ -208,6 +209,12 @@ export const useRoomStore = create<RoomStore>((set) => ({
     set((state) => ({
       walls: state.walls.map((wall) =>
         wall.id === id ? { ...wall, x, y } : wall,
+      ),
+    })),
+  updateHangingItemOffset: (id: string, ceilingOffsetCm: number) =>
+    set((state) => ({
+      hangingItems: state.hangingItems.map((item) =>
+        item.id === id ? { ...item, ceilingOffsetCm } : item,
       ),
     })),
 }));
