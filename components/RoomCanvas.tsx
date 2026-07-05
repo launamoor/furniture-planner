@@ -49,6 +49,7 @@ export default function RoomCanvas() {
           <FurnitureItems
             room={room}
             items={items}
+            walls={walls}
             updateItemPosition={updateItemPosition}
           />
         )}

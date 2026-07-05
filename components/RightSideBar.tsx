@@ -227,7 +227,7 @@ export default function RightSidebar() {
           </div>
         )}
       </div>
-      <WallSelector />
+      {/* <WallSelector />
       <div
         style={{
           display: "flex",
@@ -243,11 +243,11 @@ export default function RightSidebar() {
             room={room}
             floorItems={itemsOnWall.floorItems}
             hangingItems={itemsOnWall.hangingItems}
-            width={500}
-            height={200}
+            width={metersToPixels(room.width)}
+            height={room.roomHeightCm}
           />
         )}
-      </div>
+      </div> */}
     </aside>
   );
 }

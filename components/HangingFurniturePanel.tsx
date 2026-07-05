@@ -225,7 +225,6 @@ export default function HangingFurniturePanel() {
         overflow: "hidden",
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         order: `${room.width > 5 ? "1" : ""}`,
-        width: `${room.width > 5 ? "100%" : "50%"}`,
       }}
     >
       {/* ── Add item form ── */}
@@ -328,20 +327,20 @@ export default function HangingFurniturePanel() {
               </span>
             )}
           </div>
-          {/* Ceiling offset */}
-          <div>
-            <label style={labelStyle}>
-              Odległość od sufitu (cm, opcjonalnie)
-            </label>
-            <input
-              style={inputStyle}
-              type="number"
-              min="0"
-              placeholder="0"
-              value={form.ceilingOffsetCm}
-              onChange={set("ceilingOffsetCm")}
-            />
-          </div>
+        </div>
+        {/* Ceiling offset */}
+        <div>
+          <label style={labelStyle}>
+            Odległość od sufitu (cm, opcjonalnie)
+          </label>
+          <input
+            style={inputStyle}
+            type="number"
+            min="0"
+            placeholder="0"
+            value={form.ceilingOffsetCm}
+            onChange={set("ceilingOffsetCm")}
+          />
         </div>
 
         {/* Wood type */}

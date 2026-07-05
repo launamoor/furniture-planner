@@ -1,10 +1,14 @@
 "use client";
 
 import { Stage, Layer, Rect, Line, Text, Group } from "react-konva";
-import { FurnitureItem, HangingFurnitureItem, Room } from "@/store/roomStore";
-import { metersToPixels } from "@/utils/scale";
+import {
+  FurnitureItem,
+  HangingFurnitureItem,
+  Room,
+  Wall,
+} from "@/store/roomStore";
+import { metersToPixels, WALL_THICKNESS } from "@/utils/scale";
 import { WallKey } from "@/components/WallSelector";
-import GridLines from "./GridLines";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -13,6 +17,7 @@ type ElevationCanvasProps = {
   room: Room;
   floorItems: FurnitureItem[];
   hangingItems: HangingFurnitureItem[];
+  wallsOnWall: Wall[];
   width: number; // canvas pixel width
   height: number; // canvas pixel height
 };
@@ -38,11 +43,21 @@ function getHorizontalLayout(
   return { posM: item.x, sizeM: item.width };
 }
 
+function getWallHorizontalLayout(
+  wall: WallKey,
+  item: Wall,
+): { posM: number; sizeM: number } {
+  return wall === "left" || wall === "right"
+    ? { posM: item.y, sizeM: WALL_THICKNESS }
+    : { posM: item.x, sizeM: WALL_THICKNESS };
+}
+
 // ─── ElevationCanvas ──────────────────────────────────────────────────────────
 
 export default function ElevationCanvas({
   wall,
   room,
+  wallsOnWall,
   floorItems,
   hangingItems,
   width,
@@ -95,6 +110,19 @@ export default function ElevationCanvas({
           );
         })}
 
+        {Array.from({ length: Math.ceil(wallLengthM / 0.1) }, (_, i) => {
+          const x = originX + toPixels(i * 0.1);
+          const isMajor = i % 10 === 0;
+          return (
+            <Line
+              key={`v-${i}`}
+              points={[x, originY, x, originY + roomPxHeight]}
+              stroke="#999"
+              strokeWidth={isMajor ? 0.3 : 0.1}
+            />
+          );
+        })}
+
         {/* ── Floor line ── */}
         <Line
           points={[
@@ -106,6 +134,27 @@ export default function ElevationCanvas({
           stroke="#2c2419"
           strokeWidth={2}
         />
+
+        {wallsOnWall.map((wallItem) => {
+          const { posM, sizeM } = getWallHorizontalLayout(wall, wallItem);
+          const x = originX + toPixels(posM);
+          const mirroredX =
+            wall === "left" || wall === "bottom"
+              ? originX + roomPxWidth - toPixels(posM + sizeM)
+              : x;
+          const w = toPixels(sizeM);
+
+          return (
+            <Rect
+              key={wallItem.id}
+              x={mirroredX}
+              y={originY}
+              width={w}
+              height={roomPxHeight}
+              fill="#2c2419"
+            />
+          );
+        })}
 
         {/* ── Floor furniture ── */}
         {floorItems.map((item) => {
@@ -222,7 +271,7 @@ export default function ElevationCanvas({
         <Text
           x={0}
           y={originY}
-          width={PADDING - 2}
+          width={PADDING - 4}
           height={roomPxHeight}
           text={`${room.roomHeightCm}cm`}
           fontSize={8}
@@ -230,6 +279,7 @@ export default function ElevationCanvas({
           align="center"
           verticalAlign="middle"
           rotation={0}
+          wrap="nowrap"
         />
 
         {/* ── Width label (bottom) ── */}

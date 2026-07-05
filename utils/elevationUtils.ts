@@ -1,4 +1,9 @@
-import { FurnitureItem, HangingFurnitureItem, Room } from "@/store/roomStore";
+import {
+  FurnitureItem,
+  HangingFurnitureItem,
+  Room,
+  Wall,
+} from "@/store/roomStore";
 import { WallKey } from "@/components/WallSelector";
 import { round } from "./scale";
 
@@ -30,4 +35,31 @@ export function getItemsOnWall(
     floorItems: furnitureOnWall,
     hangingItems: hangingFurnitureOnWall,
   };
+}
+
+export function getWallsOnWall(
+  wall: WallKey,
+  walls: Wall[],
+  room: Room,
+): Wall[] {
+  const wallsOnWall = walls.filter((walll) => {
+    if (wall === "top")
+      return round(walll.y) === 0 && walll.orientation === "vertical";
+    if (wall === "bottom")
+      return (
+        round(walll.y + walll.length) === round(room.height) &&
+        walll.orientation === "vertical"
+      );
+    if (wall === "left")
+      return round(walll.x) === 0 && walll.orientation === "horizontal";
+    if (wall === "right")
+      return (
+        round(walll.x + walll.length) === round(room.width) &&
+        walll.orientation === "horizontal"
+      );
+
+    return false;
+  });
+
+  return wallsOnWall;
 }

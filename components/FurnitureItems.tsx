@@ -1,19 +1,23 @@
-import type { Room, FurnitureItem, RoomStore } from "@/store/roomStore";
+import type { Room, FurnitureItem, RoomStore, Wall } from "@/store/roomStore";
 import { Rect, Line, Group, Text } from "react-konva";
 import { metersToPixels, pixelsToMeters, snapToGrid } from "@/utils/scale";
 import Konva from "konva";
 import { useUIStore } from "@/store/uiStore";
 import { round } from "@/utils/scale";
+import { rectsOverlap } from "@/utils/collision";
+import { getWallRect } from "@/utils/wallUtils";
 
 type FurnitureItemsProps = {
   room: Room;
   items: FurnitureItem[];
+  walls: Wall[];
   updateItemPosition: RoomStore["updateItemPosition"];
 };
 
 export default function FurnitureItems({
   room,
   items,
+  walls,
   updateItemPosition,
 }: FurnitureItemsProps) {
   const handleCursor = (
@@ -54,23 +58,23 @@ export default function FurnitureItems({
             const snappedX = snapToGrid(pixelsToMeters(clampedX - roomX));
             const snappedY = snapToGrid(pixelsToMeters(clampedY - roomY));
 
+            const candidate = {
+              x: snappedX,
+              y: snappedY,
+              width: item.width,
+              height: item.height,
+            };
+
             let collided = false;
 
             items.forEach((otherItem) => {
               if (otherItem.id === item.id) return;
 
-              const leftClear =
-                round(snappedX + item.width) <= round(otherItem.x);
-              const rightClear =
-                round(snappedX) >= round(otherItem.x + otherItem.width);
-              const topClear =
-                round(snappedY + item.height) <= round(otherItem.y);
-              const bottomClear =
-                round(snappedY) >= round(otherItem.y + otherItem.height);
+              if (rectsOverlap(candidate, otherItem)) collided = true;
+            });
 
-              if (!leftClear && !rightClear && !topClear && !bottomClear) {
-                collided = true;
-              }
+            walls.forEach((wall) => {
+              if (rectsOverlap(candidate, getWallRect(wall))) collided = true;
             });
 
             if (collided) {

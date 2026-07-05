@@ -8,6 +8,11 @@ import HangingFurniturePanel from "./HangingFurniturePanel";
 import CanvasVisibilityControls from "./CanvasVisibilityControls";
 import RoomCanvas from "./RoomCanvas";
 import RightSidebar from "./RightSideBar";
+import WallSelector from "./WallSelector";
+import ElevationCanvas from "./ElevationCanvas";
+import { getItemsOnWall, getWallsOnWall } from "@/utils/elevationUtils";
+import { useRoomStore } from "@/store/roomStore";
+import { metersToPixels } from "@/utils/scale";
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
 
@@ -178,7 +183,12 @@ function CanvasPlaceholder() {
 // ─── App Shell ────────────────────────────────────────────────────────────────
 
 export default function AppShell() {
-  const { step, setStep } = useUIStore();
+  const { step, setStep, selectedWall } = useUIStore();
+  const { room, items, hangingItems, walls } = useRoomStore();
+  const itemsOnWall =
+    selectedWall && getItemsOnWall(selectedWall, items, hangingItems, room);
+
+  const wallsOnWall = selectedWall && getWallsOnWall(selectedWall, walls, room);
 
   const handleReset = () => {
     if (
@@ -332,6 +342,8 @@ export default function AppShell() {
                 style={{
                   flex: 1,
                   display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
                   alignItems: "center",
                   justifyContent: "center",
                   overflow: "auto",
@@ -339,6 +351,22 @@ export default function AppShell() {
                 }}
               >
                 <RoomCanvas />
+                <WallSelector />
+                {itemsOnWall && (
+                  <ElevationCanvas
+                    wall={selectedWall!}
+                    room={room}
+                    floorItems={itemsOnWall.floorItems}
+                    hangingItems={itemsOnWall.hangingItems}
+                    wallsOnWall={wallsOnWall || []}
+                    width={
+                      selectedWall === "top" || selectedWall === "bottom"
+                        ? metersToPixels(room.width)
+                        : metersToPixels(room.height)
+                    }
+                    height={room.roomHeightCm}
+                  />
+                )}
               </div>
             </main>
             <RightSidebar />

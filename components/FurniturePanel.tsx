@@ -249,7 +249,6 @@ export default function FurniturePanel() {
         overflow: "hidden",
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         order: `${room.width > 5 ? "1" : ""}`,
-        width: `${room.width > 5 ? "100%" : "50%"}`,
       }}
     >
       {/* ── Add item form ── */}
@@ -353,19 +352,19 @@ export default function FurniturePanel() {
             )}
           </div>
           {/* Floor offset */}
-          <div>
-            <label style={labelStyle}>
-              Odległość od podłogi (cm, opcjonalnie)
-            </label>
-            <input
-              style={inputStyle}
-              type="number"
-              min="0"
-              placeholder="0"
-              value={form.floorOffsetCm}
-              onChange={set("floorOffsetCm")}
-            />
-          </div>
+        </div>
+        <div>
+          <label style={labelStyle}>
+            Odległość od podłogi (cm, opcjonalnie)
+          </label>
+          <input
+            style={inputStyle}
+            type="number"
+            min="0"
+            placeholder="0"
+            value={form.floorOffsetCm}
+            onChange={set("floorOffsetCm")}
+          />
         </div>
 
         {/* Wood type */}
