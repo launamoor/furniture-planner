@@ -257,7 +257,7 @@ export default function HangingFurniturePanel() {
               ...inputStyle,
               borderColor: errors.name ? "#c0392b" : "#e5e0d8",
             }}
-            placeholder="np. Szafa"
+            placeholder="np. Okno"
             value={form.name}
             onChange={set("name")}
           />

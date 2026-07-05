@@ -163,7 +163,7 @@ export default function ElevationCanvas({
           const heightM = item.heightCm / 100;
 
           const x = originX + toPixels(posM);
-          const mirrorexX =
+          const mirroredX =
             wall === "left" || wall === "bottom"
               ? originX + roomPxWidth - toPixels(posM + sizeM)
               : x;
@@ -174,7 +174,7 @@ export default function ElevationCanvas({
           return (
             <Group key={item.id}>
               <Rect
-                x={mirrorexX}
+                x={mirroredX}
                 y={y}
                 width={w}
                 height={h}
@@ -184,18 +184,18 @@ export default function ElevationCanvas({
               />
               {/* Cross lines */}
               <Line
-                points={[mirrorexX, y, mirrorexX + w, y + h]}
+                points={[mirroredX, y, mirroredX + w, y + h]}
                 stroke="#2c2419"
                 strokeWidth={0.3}
               />
               <Line
-                points={[mirrorexX + w, y, mirrorexX, y + h]}
+                points={[mirroredX + w, y, mirroredX, y + h]}
                 stroke="#2c2419"
                 strokeWidth={0.3}
               />
               {/* Label */}
               <Text
-                x={mirrorexX + 2}
+                x={mirroredX + 2}
                 y={y + 2}
                 width={w - 4}
                 height={h - 4}
@@ -203,6 +203,32 @@ export default function ElevationCanvas({
                 fontSize={9}
                 fill="#2c2419"
                 align="center"
+                verticalAlign="bottom"
+                ellipsis
+                wrap="none"
+              />
+              <Text
+                x={mirroredX}
+                y={y + 1}
+                width={w - 4}
+                height={h - 4}
+                text={`${metersToPixels(item.width)}cm`}
+                fontSize={9}
+                fill="#2c2419"
+                align="center"
+                verticalAlign="top"
+                ellipsis
+                wrap="none"
+              />
+              <Text
+                x={mirroredX + 1}
+                y={y}
+                width={w - 4}
+                height={h - 4}
+                text={`${item.heightCm}cm`}
+                fontSize={9}
+                fill="#2c2419"
+                align="left"
                 verticalAlign="middle"
                 ellipsis
                 wrap="none"
@@ -259,6 +285,32 @@ export default function ElevationCanvas({
                 fontSize={9}
                 fill="#2c2419"
                 align="center"
+                verticalAlign="bottom"
+                ellipsis
+                wrap="none"
+              />
+              <Text
+                x={mirroredX}
+                y={y + 1}
+                width={w - 4}
+                height={h - 4}
+                text={`${metersToPixels(item.width)}cm`}
+                fontSize={9}
+                fill="#2c2419"
+                align="center"
+                verticalAlign="top"
+                ellipsis
+                wrap="none"
+              />
+              <Text
+                x={mirroredX + 1}
+                y={y}
+                width={w - 4}
+                height={h - 4}
+                text={`${item.heightCm}cm`}
+                fontSize={9}
+                fill="#2c2419"
+                align="left"
                 verticalAlign="middle"
                 ellipsis
                 wrap="none"
@@ -268,7 +320,7 @@ export default function ElevationCanvas({
         })}
 
         {/* ── Height label (left side) ── */}
-        <Text
+        {/* <Text
           x={0}
           y={originY}
           width={PADDING + 30}
@@ -280,10 +332,10 @@ export default function ElevationCanvas({
           verticalAlign="middle"
           rotation={0}
           wrap="nowrap"
-        />
+        /> */}
 
         {/* ── Width label (bottom) ── */}
-        <Text
+        {/* <Text
           x={originX}
           y={originY + roomPxHeight - 10}
           width={roomPxWidth}
@@ -291,7 +343,7 @@ export default function ElevationCanvas({
           fontSize={8}
           fill="#9c8672"
           align="center"
-        />
+        /> */}
       </Layer>
     </Stage>
   );

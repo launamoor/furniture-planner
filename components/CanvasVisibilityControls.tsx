@@ -15,7 +15,7 @@ function VisibilityToggle({ active, onClick, label }: VisibilityToggleProps) {
     <button
       onClick={onClick}
       title={
-        active ? `Hide ${label.toLowerCase()}` : `Show ${label.toLowerCase()}`
+        active ? `Ukryj ${label.toLowerCase()}` : `Pokaż ${label.toLowerCase()}`
       }
       style={{
         display: "flex",

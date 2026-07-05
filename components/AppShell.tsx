@@ -345,7 +345,7 @@ export default function AppShell() {
                   flexDirection: "column",
                   gap: "1rem",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "flex-start",
                   overflow: "auto",
                   padding: "24px",
                 }}
@@ -355,10 +355,34 @@ export default function AppShell() {
                 {itemsOnWall && (
                   <div
                     style={{
-                      backgroundColor: "red",
                       textAlign: "center",
+                      position: "relative",
                     }}
                   >
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "-2.3rem",
+                        transform: "translate(0, -50%)",
+                        fontSize: "11px",
+                        fontFamily: "sans-serif",
+                      }}
+                    >
+                      {room.roomHeightCm}cm
+                    </div>
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "-1.2rem",
+                        left: "50%",
+                        fontSize: "11px",
+                        fontFamily: "sans-serif",
+                        transform: "translate(-50%, 0)",
+                      }}
+                    >
+                      {room.width * 100}cm
+                    </div>
                     <ElevationCanvas
                       wall={selectedWall!}
                       room={room}

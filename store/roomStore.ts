@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { metersToPixels, WALL_THICKNESS } from "@/utils/scale";
+import { WALL_THICKNESS } from "@/utils/scale";
 
 export type FurnitureItem = {
   // Blueprint
