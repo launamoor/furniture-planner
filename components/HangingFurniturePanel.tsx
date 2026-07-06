@@ -168,21 +168,21 @@ export default function HangingFurniturePanel() {
 
   const validate = (): boolean => {
     const next: Partial<FormState> = {};
-    if (!form.name.trim()) next.name = "Required";
+    if (!form.name.trim()) next.name = "Nazwa wymagana";
     if (
       !form.width ||
       isNaN(Number(form.width)) ||
       Number(form.width) <= 0 ||
-      Number(form.width) % 10 !== 0
+      Number(form.width) % 1 !== 0
     )
-      next.width = "Podaj szerokość do 10cm";
+      next.width = "Podaj szerokość w cm";
     if (
       !form.depth ||
       isNaN(Number(form.depth)) ||
       Number(form.depth) <= 0 ||
-      Number(form.depth) % 10 !== 0
+      Number(form.depth) % 1 !== 0
     )
-      next.depth = "Podaj głębokość do 10cm";
+      next.depth = "Podaj głębokość w cm";
     if (
       !form.heightCm ||
       isNaN(Number(form.heightCm)) ||

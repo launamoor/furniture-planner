@@ -97,9 +97,9 @@ export default function ElevationCanvas({
         />
 
         {/* Grid Lines */}
-        {Array.from({ length: Math.ceil(roomHeightM / 0.1) }, (_, i) => {
-          const y = originY + roomPxHeight - toPixels(i * 0.1);
-          const isMajor = i % 10 === 0;
+        {Array.from({ length: Math.ceil(roomHeightM / 0.05) }, (_, i) => {
+          const y = originY + roomPxHeight - toPixels(i * 0.05);
+          const isMajor = i % 20 === 0;
           return (
             <Line
               key={`h-${i}`}
@@ -110,9 +110,9 @@ export default function ElevationCanvas({
           );
         })}
 
-        {Array.from({ length: Math.ceil(wallLengthM / 0.1) }, (_, i) => {
-          const x = originX + toPixels(i * 0.1);
-          const isMajor = i % 10 === 0;
+        {Array.from({ length: Math.ceil(wallLengthM / 0.05) }, (_, i) => {
+          const x = originX + toPixels(i * 0.05);
+          const isMajor = i % 20 === 0;
           return (
             <Line
               key={`v-${i}`}
