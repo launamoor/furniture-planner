@@ -8,8 +8,10 @@ import FurnitureItems from "./FurnitureItems";
 import HangingFurnitureItems from "./HangingFurnitureItems";
 import WallItems from "./WallItems";
 import { useUIStore } from "@/store/uiStore";
+import { forwardRef } from "react";
+import Konva from "konva";
 
-export default function RoomCanvas() {
+const RoomCanvas = forwardRef<Konva.Stage>(function RoomCanvas(_, ref) {
   const {
     room,
     items,
@@ -24,6 +26,7 @@ export default function RoomCanvas() {
 
   return (
     <Stage
+      ref={ref}
       width={metersToPixels(room.width) + metersToPixels(room.x) * 2}
       height={metersToPixels(room.height) + metersToPixels(room.y) * 2}
     >
@@ -77,4 +80,6 @@ export default function RoomCanvas() {
       </Layer>
     </Stage>
   );
-}
+});
+
+export default RoomCanvas;

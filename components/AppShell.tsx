@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+import Konva from "konva";
 import { useUIStore } from "@/store/uiStore";
 import RoomSizePicker from "./RoomSizePicker";
 import WallPanel from "./WallPanel";
@@ -8,10 +10,14 @@ import HangingFurniturePanel from "./HangingFurniturePanel";
 import CanvasVisibilityControls from "./CanvasVisibilityControls";
 import RoomCanvas from "./RoomCanvas";
 import RightSidebar from "./RightSideBar";
-import WallSelector from "./WallSelector";
+import WallSelector, { WallKey } from "./WallSelector";
 import ElevationCanvas from "./ElevationCanvas";
 import { getItemsOnWall, getWallsOnWall } from "@/utils/elevationUtils";
-import { useRoomStore } from "@/store/roomStore";
+import {
+  useRoomStore,
+  FurnitureItem,
+  HangingFurnitureItem,
+} from "@/store/roomStore";
 import { metersToPixels } from "@/utils/scale";
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
@@ -25,13 +31,7 @@ const STEPS = [
 
 function StepIndicator({ current }: { current: number }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "0",
-      }}
-    >
+    <div style={{ display: "flex", alignItems: "center", gap: "0" }}>
       {STEPS.map((step, i) => {
         const isDone = current > step.number;
         const isActive = current === step.number;
@@ -41,7 +41,6 @@ function StepIndicator({ current }: { current: number }) {
             key={step.number}
             style={{ display: "flex", alignItems: "center" }}
           >
-            {/* Connector line */}
             {i > 0 && (
               <div
                 style={{
@@ -52,8 +51,6 @@ function StepIndicator({ current }: { current: number }) {
                 }}
               />
             )}
-
-            {/* Step pill */}
             <div
               style={{
                 display: "flex",
@@ -155,40 +152,27 @@ function Sidebar() {
   );
 }
 
-// ─── Canvas placeholder ───────────────────────────────────────────────────────
-
-function CanvasPlaceholder() {
-  return (
-    <div
-      style={{
-        flex: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#faf8f5",
-        color: "#c4bdb4",
-        fontSize: "13px",
-        flexDirection: "column",
-        gap: "8px",
-        overflow: "auto",
-      }}
-    >
-      {/* Replace with: <RoomCanvas /> */}
-      <span style={{ fontSize: "28px" }}>🪑</span>
-      <span>Tutaj pojawi się podgląd pokoju</span>
-    </div>
-  );
-}
-
 // ─── App Shell ────────────────────────────────────────────────────────────────
 
 export default function AppShell() {
-  const { step, setStep, selectedWall } = useUIStore();
+  const {
+    step,
+    setStep,
+    selectedWall,
+    setSelectedWall,
+    showFloorFurniture,
+    showHangingFurniture,
+    toggleFloorFurniture,
+    toggleHangingFurniture,
+  } = useUIStore();
   const { room, items, hangingItems, walls } = useRoomStore();
+
   const itemsOnWall =
     selectedWall && getItemsOnWall(selectedWall, items, hangingItems, room);
-
   const wallsOnWall = selectedWall && getWallsOnWall(selectedWall, walls, room);
+
+  const roomStageRef = useRef<Konva.Stage>(null);
+  const elevationStageRef = useRef<Konva.Stage>(null);
 
   const handleReset = () => {
     if (
@@ -201,6 +185,98 @@ export default function AppShell() {
       // useRoomStore.getState().setRoom(0, 0) or a dedicated reset action
     }
   };
+
+  const waitForRender = () =>
+    new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+    );
+
+  const WALL_KEYS: WallKey[] = ["top", "bottom", "left", "right"];
+
+  async function generatePdf() {
+    const {
+      showFloorFurniture: originalShowFloor,
+      showHangingFurniture: originalShowHanging,
+    } = useUIStore.getState();
+    const originalWall = useUIStore.getState().selectedWall;
+
+    try {
+      // Overview: both visible
+      if (!useUIStore.getState().showFloorFurniture) toggleFloorFurniture();
+      if (!useUIStore.getState().showHangingFurniture) toggleHangingFurniture();
+      await waitForRender();
+      const overviewImage = roomStageRef.current?.toDataURL();
+
+      // Floor only
+      if (useUIStore.getState().showHangingFurniture) toggleHangingFurniture();
+      await waitForRender();
+      const floorImage = roomStageRef.current?.toDataURL();
+
+      // Hanging only
+      if (!useUIStore.getState().showHangingFurniture) toggleHangingFurniture();
+      if (useUIStore.getState().showFloorFurniture) toggleFloorFurniture();
+      await waitForRender();
+      const hangingImage = roomStageRef.current?.toDataURL();
+
+      // Elevations
+      const elevations: Record<
+        string,
+        {
+          image: string;
+          floorItems: FurnitureItem[];
+          hangingItems: HangingFurnitureItem[];
+        }
+      > = {};
+
+      for (const wall of WALL_KEYS) {
+        const onWall = getItemsOnWall(wall, items, hangingItems, room);
+        if (onWall.floorItems.length === 0 && onWall.hangingItems.length === 0)
+          continue;
+
+        setSelectedWall(wall);
+        await waitForRender();
+        const image = elevationStageRef.current?.toDataURL();
+        if (image) {
+          elevations[wall] = {
+            image,
+            floorItems: onWall.floorItems,
+            hangingItems: onWall.hangingItems,
+          };
+        }
+      }
+
+      const payload = {
+        room,
+        overviewImage,
+        floorImage,
+        hangingImage,
+        floorItems: items,
+        hangingItems,
+        elevations,
+      };
+
+      const res = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "bejger-manufaktura-plan.pdf";
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      const current = useUIStore.getState();
+      if (current.showFloorFurniture !== originalShowFloor)
+        toggleFloorFurniture();
+      if (current.showHangingFurniture !== originalShowHanging)
+        toggleHangingFurniture();
+      setSelectedWall(originalWall);
+    }
+  }
 
   return (
     <div
@@ -263,14 +339,12 @@ export default function AppShell() {
           </span>
         </div>
 
-        {/* Step indicator — hidden on step 1 */}
         {step > 1 && (
           <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
             <StepIndicator current={step} />
           </div>
         )}
 
-        {/* Reset button — hidden on step 1 */}
         {step > 1 && (
           <button
             onClick={handleReset}
@@ -304,26 +378,13 @@ export default function AppShell() {
       </header>
 
       {/* ── Main area ── */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          overflow: "hidden",
-        }}
-      >
-        {/* Step 1 — full screen, no sidebar */}
+      <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
         {step === 1 && (
-          <div
-            style={{
-              flex: 1,
-              overflow: "auto",
-            }}
-          >
+          <div style={{ flex: 1, overflow: "auto" }}>
             <RoomSizePicker />
           </div>
         )}
 
-        {/* Steps 2–4 — sidebar + canvas */}
         {step > 1 && (
           <>
             <Sidebar />
@@ -337,7 +398,6 @@ export default function AppShell() {
                 background: "#faf8f5",
               }}
             >
-              {/* Canvas area */}
               <div
                 style={{
                   flex: 1,
@@ -350,15 +410,10 @@ export default function AppShell() {
                   padding: "24px",
                 }}
               >
-                <RoomCanvas />
+                <RoomCanvas ref={roomStageRef} />
                 <WallSelector />
                 {itemsOnWall && (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      position: "relative",
-                    }}
-                  >
+                  <div style={{ textAlign: "center", position: "relative" }}>
                     <div
                       style={{
                         position: "absolute",
@@ -384,6 +439,7 @@ export default function AppShell() {
                       {room.width * 100}cm
                     </div>
                     <ElevationCanvas
+                      ref={elevationStageRef}
                       wall={selectedWall!}
                       room={room}
                       floorItems={itemsOnWall.floorItems}
@@ -400,7 +456,7 @@ export default function AppShell() {
                 )}
               </div>
             </main>
-            <RightSidebar />
+            <RightSidebar onGeneratePdf={generatePdf} />
           </>
         )}
       </div>

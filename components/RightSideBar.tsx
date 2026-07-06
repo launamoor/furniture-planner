@@ -83,7 +83,11 @@ function Divider() {
 
 // ─── RightSidebar ─────────────────────────────────────────────────────────────
 
-export default function RightSidebar() {
+type RightSideBarProps = {
+  onGeneratePdf: () => void;
+};
+
+export default function RightSidebar({ onGeneratePdf }: RightSideBarProps) {
   const {
     room,
     items,
@@ -93,7 +97,7 @@ export default function RightSidebar() {
     updateHangingItemPosition,
     updateHangingItemOffset,
   } = useRoomStore();
-  const { selectedItemId, selectedItemType, selectedWall } = useUIStore();
+  const { selectedItemId, selectedItemType, selectedWall, step } = useUIStore();
 
   const [offsetError, setOffsetError] = useState<string | null>(null);
 
@@ -466,27 +470,26 @@ export default function RightSidebar() {
           </div>
         )}
       </div>
-      {/* <WallSelector />
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          marginBottom: "2rem",
-        }}
-      >
-        {itemsOnWall && (
-          <ElevationCanvas
-            wall={selectedWall!}
-            room={room}
-            floorItems={itemsOnWall.floorItems}
-            hangingItems={itemsOnWall.hangingItems}
-            width={metersToPixels(room.width)}
-            height={room.roomHeightCm}
-          />
-        )}
-      </div> */}
+      {step > 2 && (
+        <div style={{ padding: "14px", borderTop: "1px solid #e5e0d8" }}>
+          <button
+            onClick={onGeneratePdf}
+            style={{
+              width: "100%",
+              padding: "10px",
+              background: "#2c1f0e",
+              color: "#f5f1eb",
+              border: "none",
+              borderRadius: "4px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Wygeneruj PDF
+          </button>
+        </div>
+      )}
     </aside>
   );
 }
