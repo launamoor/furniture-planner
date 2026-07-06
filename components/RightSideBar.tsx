@@ -151,8 +151,8 @@ export default function RightSidebar({ onGeneratePdf }: RightSideBarProps) {
         {!selectedItem ? (
           <p
             style={{
-              fontSize: "11px",
-              color: "#b0a898",
+              fontSize: "12px",
+              color: "#000000",
               textAlign: "center",
               padding: "20px 14px",
               lineHeight: 1.6,
