@@ -1,19 +1,35 @@
-import type { Room, HangingFurnitureItem, RoomStore } from "@/store/roomStore";
+import type {
+  Room,
+  HangingFurnitureItem,
+  RoomStore,
+  FurnitureItem,
+} from "@/store/roomStore";
 import { Rect, Line, Group, Text } from "react-konva";
-import { metersToPixels, pixelsToMeters, round, snapToGrid } from "@/utils/scale";
+import {
+  metersToPixels,
+  pixelsToMeters,
+  round,
+  snapToGrid,
+} from "@/utils/scale";
 import Konva from "konva";
 import { useUIStore } from "@/store/uiStore";
-import { verticalRangesOverlap } from "@/utils/collision";
+import {
+  floorVsHangingOverlap,
+  rectsOverlap,
+  verticalRangesOverlap,
+} from "@/utils/collision";
 
 type HangingFurnitureItemsProps = {
   room: Room;
   hangingItems: HangingFurnitureItem[];
+  items: FurnitureItem[];
   updateHangingItemPosition: RoomStore["updateHangingItemPosition"];
 };
 
 export default function HangingFurnitureItems({
   room,
   hangingItems,
+  items,
   updateHangingItemPosition,
 }: HangingFurnitureItemsProps) {
   const handleCursor = (
@@ -82,6 +98,32 @@ export default function HangingFurnitureItems({
               }
             });
 
+            items.forEach((floorItem) => {
+              const leftClear =
+                round(snappedX + item.width) <= round(floorItem.x);
+              const rightClear =
+                round(snappedX) >= round(floorItem.x + floorItem.width);
+              const topClear =
+                round(snappedY + item.height) <= round(floorItem.y);
+              const bottomClear =
+                round(snappedY) >= round(floorItem.y + floorItem.height);
+
+              const footprintOverlap =
+                !leftClear && !rightClear && !topClear && !bottomClear;
+              if (!footprintOverlap) return;
+
+              if (
+                floorVsHangingOverlap(
+                  floorItem.floorOffsetCm ?? 0,
+                  floorItem.heightCm,
+                  item.ceilingOffsetCm ?? 0,
+                  item.heightCm,
+                  room.roomHeightCm,
+                )
+              ) {
+                collided = true;
+              }
+            });
             if (collided) {
               e.target.x(snapToGrid(metersToPixels(item.x) + roomX));
               e.target.y(snapToGrid(metersToPixels(item.y) + roomY));

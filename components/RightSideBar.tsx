@@ -1,10 +1,15 @@
 "use client";
 
-import { useRoomStore } from "@/store/roomStore";
+import { FurnitureItem, useRoomStore } from "@/store/roomStore";
 import { useUIStore } from "@/store/uiStore";
 import { getItemsOnWall } from "@/utils/elevationUtils";
 import { useState } from "react";
-import { verticalRangesOverlap } from "@/utils/collision";
+import {
+  verticalRangesOverlap,
+  rectsOverlap,
+  floorVsHangingOverlap,
+} from "@/utils/collision";
+import { getWallRect } from "@/utils/wallUtils";
 
 // ─── Section header ───────────────────────────────────────────────────────────
 
@@ -79,7 +84,15 @@ function Divider() {
 // ─── RightSidebar ─────────────────────────────────────────────────────────────
 
 export default function RightSidebar() {
-  const { room, items, hangingItems, updateHangingItemOffset } = useRoomStore();
+  const {
+    room,
+    items,
+    hangingItems,
+    walls,
+    updateItemPosition,
+    updateHangingItemPosition,
+    updateHangingItemOffset,
+  } = useRoomStore();
   const { selectedItemId, selectedItemType, selectedWall } = useUIStore();
 
   const [offsetError, setOffsetError] = useState<string | null>(null);
@@ -250,7 +263,23 @@ export default function RightSidebar() {
                           );
                         });
 
-                        if (collision) {
+                        const floorCollision = items.some((floorItem) => {
+                          const footprintOverlap =
+                            selectedItem.x < floorItem.x + floorItem.width &&
+                            floorItem.x < selectedItem.x + selectedItem.width &&
+                            selectedItem.y < floorItem.y + floorItem.height &&
+                            floorItem.y < selectedItem.y + selectedItem.height;
+                          if (!footprintOverlap) return false;
+                          return floorVsHangingOverlap(
+                            floorItem.floorOffsetCm ?? 0,
+                            floorItem.heightCm,
+                            newOffset,
+                            selectedItem.heightCm,
+                            room.roomHeightCm,
+                          );
+                        });
+
+                        if (collision || floorCollision) {
                           setOffsetError("Kolizja z innym meblem");
                           return;
                         }
@@ -278,7 +307,7 @@ export default function RightSidebar() {
               )}
 
             {/* Position in room */}
-            <Divider />
+            {/* <Divider />
             <SectionLabel>Pozycja</SectionLabel>
             <InfoRow
               label="X"
@@ -287,7 +316,153 @@ export default function RightSidebar() {
             <InfoRow
               label="Y"
               value={`${Math.round(selectedItem.y * 100)} cm`}
-            />
+            /> */}
+            <Divider />
+            <SectionLabel>Pozycja</SectionLabel>
+            {(["x", "y"] as const).map((axis) => (
+              <div key={axis} style={{ padding: "5px 14px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span style={{ fontSize: "11px", color: "#7a6a5a" }}>
+                    {axis.toUpperCase()}
+                  </span>
+                  <input
+                    type="number"
+                    value={Math.round(selectedItem[axis] * 100)}
+                    onChange={(e) => {
+                      const cm = Number(e.target.value);
+                      if (Number.isNaN(cm)) return;
+                      const newM = cm / 100;
+
+                      const candidate = {
+                        x: axis === "x" ? newM : selectedItem.x,
+                        y: axis === "y" ? newM : selectedItem.y,
+                        width: selectedItem.width,
+                        height: selectedItem.height,
+                      };
+
+                      if (
+                        candidate.x < 0 ||
+                        candidate.y < 0 ||
+                        candidate.x + candidate.width > room.width ||
+                        candidate.y + candidate.height > room.height
+                      ) {
+                        setOffsetError("Poza zasięgiem pomieszczenia");
+                        return;
+                      }
+
+                      const wallCollision = walls.some((wall) =>
+                        rectsOverlap(candidate, getWallRect(wall)),
+                      );
+
+                      if (selectedItemType === "floor") {
+                        const floorSelectedItem = selectedItem as FurnitureItem;
+
+                        const itemCollision = items.some(
+                          (other) =>
+                            other.id !== floorSelectedItem.id &&
+                            rectsOverlap(candidate, other),
+                        );
+
+                        const hangingCollision = hangingItems.some(
+                          (hangingItem) => {
+                            if (!rectsOverlap(candidate, hangingItem))
+                              return false;
+                            return floorVsHangingOverlap(
+                              floorSelectedItem.floorOffsetCm ?? 0,
+                              floorSelectedItem.heightCm,
+                              hangingItem.ceilingOffsetCm ?? 0,
+                              hangingItem.heightCm,
+                              room.roomHeightCm,
+                            );
+                          },
+                        );
+
+                        if (
+                          itemCollision ||
+                          wallCollision ||
+                          hangingCollision
+                        ) {
+                          setOffsetError("Kolizja z innym elementem");
+                          return;
+                        }
+
+                        setOffsetError(null);
+                        updateItemPosition(
+                          floorSelectedItem.id,
+                          candidate.x,
+                          candidate.y,
+                        );
+                      } else if (selectedItemType === "hanging") {
+                        const itemCollision = hangingItems.some(
+                          (other) =>
+                            other.id !== selectedItem.id &&
+                            rectsOverlap(candidate, other) &&
+                            verticalRangesOverlap(
+                              (selectedItem as (typeof hangingItems)[number])
+                                .ceilingOffsetCm ?? 0,
+                              selectedItem.heightCm,
+                              other.ceilingOffsetCm ?? 0,
+                              other.heightCm,
+                            ),
+                        );
+
+                        const floorCollision = items.some((floorItem) => {
+                          if (!rectsOverlap(candidate, floorItem)) return false;
+                          return floorVsHangingOverlap(
+                            floorItem.floorOffsetCm ?? 0,
+                            floorItem.heightCm,
+                            (selectedItem as (typeof hangingItems)[number])
+                              .ceilingOffsetCm ?? 0,
+                            selectedItem.heightCm,
+                            room.roomHeightCm,
+                          );
+                        });
+
+                        if (itemCollision || wallCollision || floorCollision) {
+                          setOffsetError("Kolizja z innym elementem");
+                          return;
+                        }
+
+                        setOffsetError(null);
+                        updateHangingItemPosition(
+                          selectedItem.id,
+                          candidate.x,
+                          candidate.y,
+                        );
+                      }
+                    }}
+                    style={{
+                      width: "60px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      textAlign: "right",
+                      border: "1px solid #999",
+                      borderRadius: "4px",
+                      padding: "2px 6px",
+                      backgroundColor: "#faf8f5",
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+            {offsetError && (
+              <span
+                style={{
+                  fontSize: "10px",
+                  color: "#b5442e",
+                  padding: "0 14px",
+                }}
+              >
+                {offsetError}
+              </span>
+            )}
           </div>
         )}
       </div>

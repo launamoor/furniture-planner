@@ -18,3 +18,28 @@ export function verticalRangesOverlap(
 ): boolean {
   return aOffset < bOffset + bHeight && bOffset < aOffset + aHeight;
 }
+
+export function rangesOverlap(
+  aFrom: number,
+  aTo: number,
+  bFrom: number,
+  bTo: number,
+): boolean {
+  return aFrom < bTo && bFrom < aTo;
+}
+
+export function floorVsHangingOverlap(
+  floorOffsetCm: number,
+  floorHeightCm: number,
+  ceilingOffsetCm: number,
+  hangingHeightCm: number,
+  roomHeightCm: number,
+): boolean {
+  const floorFrom = floorOffsetCm;
+  const floorTo = floorOffsetCm + floorHeightCm;
+
+  const hangingTo = roomHeightCm - ceilingOffsetCm;
+  const hangingFrom = hangingTo - hangingHeightCm;
+
+  return rangesOverlap(floorFrom, floorTo, hangingFrom, hangingTo);
+}

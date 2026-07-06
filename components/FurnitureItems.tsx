@@ -1,15 +1,22 @@
-import type { Room, FurnitureItem, RoomStore, Wall } from "@/store/roomStore";
+import type {
+  Room,
+  FurnitureItem,
+  RoomStore,
+  Wall,
+  HangingFurnitureItem,
+} from "@/store/roomStore";
 import { Rect, Line, Group, Text } from "react-konva";
 import { metersToPixels, pixelsToMeters, snapToGrid } from "@/utils/scale";
 import Konva from "konva";
 import { useUIStore } from "@/store/uiStore";
 import { round } from "@/utils/scale";
-import { rectsOverlap } from "@/utils/collision";
+import { floorVsHangingOverlap, rectsOverlap } from "@/utils/collision";
 import { getWallRect } from "@/utils/wallUtils";
 
 type FurnitureItemsProps = {
   room: Room;
   items: FurnitureItem[];
+  hangingItems: HangingFurnitureItem[];
   walls: Wall[];
   updateItemPosition: RoomStore["updateItemPosition"];
 };
@@ -18,6 +25,7 @@ export default function FurnitureItems({
   room,
   items,
   walls,
+  hangingItems,
   updateItemPosition,
 }: FurnitureItemsProps) {
   const handleCursor = (
@@ -75,6 +83,22 @@ export default function FurnitureItems({
 
             walls.forEach((wall) => {
               if (rectsOverlap(candidate, getWallRect(wall))) collided = true;
+            });
+
+            hangingItems.forEach((hangingItem) => {
+              const footprintOverlap = rectsOverlap(candidate, hangingItem);
+              if (!footprintOverlap) return;
+              if (
+                floorVsHangingOverlap(
+                  item.floorOffsetCm ?? 0,
+                  item.heightCm,
+                  hangingItem.ceilingOffsetCm ?? 0,
+                  hangingItem.heightCm,
+                  room.roomHeightCm,
+                )
+              ) {
+                collided = true;
+              }
             });
 
             if (collided) {

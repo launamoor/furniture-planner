@@ -49,6 +49,7 @@ export default function RoomCanvas() {
           <FurnitureItems
             room={room}
             items={items}
+            hangingItems={hangingItems}
             walls={walls}
             updateItemPosition={updateItemPosition}
           />
@@ -67,6 +68,7 @@ export default function RoomCanvas() {
         {showHangingFurniture && (
           <HangingFurnitureItems
             room={room}
+            items={items}
             hangingItems={hangingItems}
             updateHangingItemPosition={updateHangingItemPosition}
           />
