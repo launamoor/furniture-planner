@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Konva from "konva";
 import { useUIStore } from "@/store/uiStore";
 import RoomSizePicker from "./RoomSizePicker";
@@ -19,6 +19,7 @@ import {
   HangingFurnitureItem,
 } from "@/store/roomStore";
 import { metersToPixels } from "@/utils/scale";
+import { useViewportWidth } from "@/hooks/useViewportWidth";
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
 
@@ -117,12 +118,14 @@ function Sidebar() {
     toggleHangingFurniture,
     step,
   } = useUIStore();
+
   const renderStep = () => {
     if (step === 1) return <RoomSizePicker />;
     if (step === 2) return <WallPanel />;
     if (step === 3) return <FurniturePanel />;
     if (step === 4) return <HangingFurniturePanel />;
   };
+
   return (
     <aside
       style={{
@@ -160,12 +163,14 @@ export default function AppShell() {
     setStep,
     selectedWall,
     setSelectedWall,
-    showFloorFurniture,
-    showHangingFurniture,
     toggleFloorFurniture,
     toggleHangingFurniture,
   } = useUIStore();
   const { room, items, hangingItems, walls } = useRoomStore();
+
+  const viewportWidth = useViewportWidth();
+  const isCompact = viewportWidth < 1336;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const itemsOnWall =
     selectedWall && getItemsOnWall(selectedWall, items, hangingItems, room);
@@ -387,7 +392,46 @@ export default function AppShell() {
 
         {step > 1 && (
           <>
-            <Sidebar />
+            {isCompact ? (
+              <>
+                <button
+                  onClick={() => setSidebarOpen((v) => !v)}
+                  style={{
+                    position: "fixed",
+                    top: "70px",
+                    left: sidebarOpen ? "calc(20% - 1px)" : "0",
+                    zIndex: 20,
+                    background: "#2c1f0e",
+                    color: "#f5f1eb",
+                    border: "none",
+                    borderRadius: "0 4px 4px 0",
+                    padding: "10px 6px",
+                    cursor: "pointer",
+                    transition: "left 0.2s",
+                  }}
+                >
+                  {sidebarOpen ? "‹" : "›"}
+                </button>
+                <div
+                  style={{
+                    position: "fixed",
+                    top: "56px",
+                    left: sidebarOpen ? 0 : "-20%",
+                    width: "100%",
+                    height: "calc(100% - 56px)",
+                    zIndex: 15,
+                    transition: "left 0.2s",
+                    boxShadow: sidebarOpen
+                      ? "2px 0 8px rgba(0,0,0,0.15)"
+                      : "none",
+                  }}
+                >
+                  <Sidebar />
+                </div>
+              </>
+            ) : (
+              <Sidebar />
+            )}
 
             <main
               style={{

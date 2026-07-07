@@ -1,5 +1,8 @@
 "use client";
 
+import { useViewportWidth } from "@/hooks/useViewportWidth";
+import { useState } from "react";
+
 // Drop this above or alongside your RoomCanvas. Wire onClick handlers to
 // useUIStore's toggleFloorFurniture / toggleHangingFurniture, and pass
 // showFloorFurniture / showHangingFurniture as the `active` props.
@@ -60,10 +63,13 @@ export default function CanvasVisibilityControls({
   onToggleFloor: () => void;
   onToggleHanging: () => void;
 }) {
+  const viewportWidth = useViewportWidth();
+  const isCompact = viewportWidth < 1336;
   return (
     <div
       style={{
         display: "flex",
+        flexDirection: `${isCompact ? "column" : "row"}`,
         gap: "8px",
         padding: "10px 0",
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",

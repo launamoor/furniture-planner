@@ -5,14 +5,6 @@ import { useRoomStore } from "@/store/roomStore";
 import { useUIStore } from "@/store/uiStore";
 import { roomPresets } from "@/constants/roomPresets";
 
-// Icons representing room sizes visually
-const SIZE_ICONS: Record<string, string> = {
-  small: "▪",
-  medium: "◾",
-  large: "⬛",
-  "extra large": "🟫",
-};
-
 export default function RoomSizePicker() {
   const { setRoom } = useRoomStore();
   const { setStep } = useUIStore();
