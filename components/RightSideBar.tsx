@@ -85,9 +85,13 @@ function Divider() {
 
 type RightSideBarProps = {
   onGeneratePdf: () => void;
+  onRequestQuote: () => void;
 };
 
-export default function RightSidebar({ onGeneratePdf }: RightSideBarProps) {
+export default function RightSidebar({
+  onGeneratePdf,
+  onRequestQuote,
+}: RightSideBarProps) {
   const {
     room,
     items,
@@ -470,26 +474,48 @@ export default function RightSidebar({ onGeneratePdf }: RightSideBarProps) {
           </div>
         )}
       </div>
-      {step > 2 && (
-        <div style={{ padding: "14px", borderTop: "1px solid #e5e0d8" }}>
-          <button
-            onClick={onGeneratePdf}
-            style={{
-              width: "100%",
-              padding: "10px",
-              background: "#2c1f0e",
-              color: "#f5f1eb",
-              border: "none",
-              borderRadius: "4px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            Wygeneruj PDF
-          </button>
-        </div>
-      )}
+      <div
+        style={{
+          padding: "14px",
+          borderTop: "1px solid #e5e0d8",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <button
+          onClick={onGeneratePdf}
+          style={{
+            width: "100%",
+            padding: "10px",
+            background: "transparent",
+            color: "#2c1f0e",
+            border: "1px solid #2c1f0e",
+            borderRadius: "4px",
+            fontSize: "12px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          Wygeneruj PDF
+        </button>
+        <button
+          onClick={onRequestQuote}
+          style={{
+            width: "100%",
+            padding: "10px",
+            background: "#2c1f0e",
+            color: "#f5f1eb",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "12px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          Zapytaj o wycenę
+        </button>
+      </div>
     </aside>
   );
 }

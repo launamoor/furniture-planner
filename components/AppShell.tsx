@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Konva from "konva";
+import toast from "react-hot-toast";
 import { useUIStore } from "@/store/uiStore";
 import RoomSizePicker from "./RoomSizePicker";
 import WallPanel from "./WallPanel";
@@ -20,6 +21,8 @@ import {
 } from "@/store/roomStore";
 import { metersToPixels } from "@/utils/scale";
 import { useViewportWidth } from "@/hooks/useViewportWidth";
+import ScreenTooSmallWarning from "./ScreenTooSmallWarning";
+import QuoteRequestModal, { QuoteFormData } from "./QuoteRequestModal";
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
 
@@ -168,9 +171,11 @@ export default function AppShell() {
   } = useUIStore();
   const { room, items, hangingItems, walls } = useRoomStore();
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const viewportWidth = useViewportWidth();
   const isCompact = viewportWidth < 1336;
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isTooSmall = viewportWidth < 1050;
 
   const itemsOnWall =
     selectedWall && getItemsOnWall(selectedWall, items, hangingItems, room);
@@ -186,8 +191,6 @@ export default function AppShell() {
       )
     ) {
       setStep(1);
-      // Also reset your room store here:
-      // useRoomStore.getState().setRoom(0, 0) or a dedicated reset action
     }
   };
 
@@ -198,7 +201,7 @@ export default function AppShell() {
 
   const WALL_KEYS: WallKey[] = ["top", "bottom", "left", "right"];
 
-  async function generatePdf() {
+  async function capturePlanPayload() {
     const {
       showFloorFurniture: originalShowFloor,
       showHangingFurniture: originalShowHanging,
@@ -250,7 +253,7 @@ export default function AppShell() {
         }
       }
 
-      const payload = {
+      return {
         room,
         overviewImage,
         floorImage,
@@ -259,20 +262,6 @@ export default function AppShell() {
         hangingItems,
         elevations,
       };
-
-      const res = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "bejger-manufaktura-plan.pdf";
-      a.click();
-      URL.revokeObjectURL(url);
     } finally {
       const current = useUIStore.getState();
       if (current.showFloorFurniture !== originalShowFloor)
@@ -281,6 +270,42 @@ export default function AppShell() {
         toggleHangingFurniture();
       setSelectedWall(originalWall);
     }
+  }
+
+  async function generatePdf() {
+    const payload = await capturePlanPayload();
+
+    const res = await fetch("/api/generate-pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "bejger-manufaktura-plan.pdf";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function handleQuoteSubmit(formData: QuoteFormData) {
+    const payload = await capturePlanPayload();
+
+    const res = await fetch("/api/send-quote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...payload, formData }),
+    });
+
+    if (!res.ok) throw new Error("Failed to send quote request");
+
+    toast.success("Zapytanie zostało wysłane!");
+  }
+
+  if (isTooSmall) {
+    return <ScreenTooSmallWarning />;
   }
 
   return (
@@ -351,34 +376,63 @@ export default function AppShell() {
         )}
 
         {step > 1 && (
-          <button
-            onClick={handleReset}
+          <div
             style={{
-              flexShrink: 0,
-              padding: "6px 14px",
-              background: "transparent",
-              color: "#7a6a5a",
-              border: "1px solid #4a3d2e",
-              borderRadius: "4px",
-              fontSize: "11px",
-              fontWeight: 600,
-              cursor: "pointer",
-              letterSpacing: "0.03em",
-              fontFamily:
-                "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              transition: "all 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#c4a882";
-              e.currentTarget.style.color = "#c4a882";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "#4a3d2e";
-              e.currentTarget.style.color = "#7a6a5a";
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "1rem",
             }}
           >
-            ↺ Zacznij od nowa
-          </button>
+            <button
+              onClick={handleReset}
+              style={{
+                flexShrink: 0,
+                padding: "6px 14px",
+                background: "transparent",
+                color: "#f5f1eb",
+                border: "1px solid #4a3d2e",
+                borderRadius: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+                cursor: "pointer",
+                letterSpacing: "0.03em",
+                fontFamily:
+                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#c4a882";
+                e.currentTarget.style.color = "#c4a882";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#4a3d2e";
+                e.currentTarget.style.color = "#7a6a5a";
+              }}
+            >
+              ↺ Zacznij od nowa
+            </button>
+            <a
+              style={{
+                flexShrink: 0,
+                padding: "6px 14px",
+                background: "transparent",
+                color: "#f5f1eb",
+                border: "1px solid #4a3d2e",
+                borderRadius: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+                cursor: "pointer",
+                letterSpacing: "0.03em",
+                fontFamily:
+                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                transition: "all 0.15s",
+              }}
+              href="https://bejgermanufaktura.pl"
+            >
+              ← Wróć na stronę główną
+            </a>
+          </div>
         )}
       </header>
 
@@ -500,10 +554,19 @@ export default function AppShell() {
                 )}
               </div>
             </main>
-            <RightSidebar onGeneratePdf={generatePdf} />
+            <RightSidebar
+              onGeneratePdf={generatePdf}
+              onRequestQuote={() => setQuoteModalOpen(true)}
+            />
           </>
         )}
       </div>
+
+      <QuoteRequestModal
+        open={quoteModalOpen}
+        onClose={() => setQuoteModalOpen(false)}
+        onSubmit={handleQuoteSubmit}
+      />
     </div>
   );
 }
