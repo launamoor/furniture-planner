@@ -17,10 +17,10 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <span
       style={{
-        fontSize: "11px",
+        fontSize: "10px",
         fontWeight: 700,
-        letterSpacing: "0.08em",
-        color: "#9c8672",
+        letterSpacing: "0.28em",
+        color: "#928B82",
         textTransform: "uppercase",
         padding: "0 14px 6px",
         display: "block",
@@ -47,7 +47,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
       <span
         style={{
           fontSize: "11px",
-          color: "#7a6a5a",
+          color: "#928B82",
           flexShrink: 0,
         }}
       >
@@ -57,7 +57,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
         style={{
           fontSize: "12px",
           fontWeight: 600,
-          color: "#2c2419",
+          color: "#2A2622",
           textAlign: "right",
         }}
       >
@@ -74,7 +74,7 @@ function Divider() {
     <div
       style={{
         height: "1px",
-        background: "#e5e0d8",
+        background: "#EDE8DF",
         margin: "10px 0",
       }}
     />
@@ -121,13 +121,13 @@ export default function RightSidebar({
       style={{
         width: "20%",
         flexShrink: 0,
-        background: "#f5f1eb",
-        borderLeft: "1px solid #e5e0d8",
+        background: "#F5F2EE",
+        borderLeft: "1px solid #EDE8DF",
         display: "flex",
         flexDirection: "column",
         height: "100%",
         overflow: "hidden",
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
       }}
     >
       {/* ── Room info ── */}
@@ -193,7 +193,7 @@ export default function RightSidebar({
                 style={{
                   fontSize: "13px",
                   fontWeight: 700,
-                  color: "#2c2419",
+                  color: "#2A2622",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -237,7 +237,7 @@ export default function RightSidebar({
                       gap: "8px",
                     }}
                   >
-                    <span style={{ fontSize: "11px", color: "#7a6a5a" }}>
+                    <span style={{ fontSize: "11px", color: "#928B82" }}>
                       Od sufitu
                     </span>
                     <input
@@ -299,10 +299,10 @@ export default function RightSidebar({
                         fontSize: "12px",
                         fontWeight: 600,
                         textAlign: "right",
-                        border: "1px solid #999",
+                        border: "1px solid #928B82",
                         borderRadius: "4px",
                         padding: "2px 6px",
-                        backgroundColor: "#faf8f5",
+                        backgroundColor: "#F5F2EE",
                       }}
                     />
                   </div>
@@ -337,7 +337,7 @@ export default function RightSidebar({
                     gap: "8px",
                   }}
                 >
-                  <span style={{ fontSize: "11px", color: "#7a6a5a" }}>
+                  <span style={{ fontSize: "11px", color: "#928B82" }}>
                     {axis.toUpperCase()}
                   </span>
                   <input
@@ -451,10 +451,10 @@ export default function RightSidebar({
                       fontSize: "12px",
                       fontWeight: 600,
                       textAlign: "right",
-                      border: "1px solid #999",
+                      border: "1px solid #928B82",
                       borderRadius: "4px",
                       padding: "2px 6px",
-                      backgroundColor: "#faf8f5",
+                      backgroundColor: "#F5F2EE",
                     }}
                   />
                 </div>
@@ -477,7 +477,7 @@ export default function RightSidebar({
       <div
         style={{
           padding: "14px",
-          borderTop: "1px solid #e5e0d8",
+          borderTop: "1px solid #EDE8DF",
           display: "flex",
           flexDirection: "column",
           gap: "8px",
@@ -489,8 +489,8 @@ export default function RightSidebar({
             width: "100%",
             padding: "10px",
             background: "transparent",
-            color: "#2c1f0e",
-            border: "1px solid #2c1f0e",
+            color: "#2A2622",
+            border: "1px solid #2A2622",
             borderRadius: "4px",
             fontSize: "12px",
             fontWeight: 700,
@@ -504,8 +504,8 @@ export default function RightSidebar({
           style={{
             width: "100%",
             padding: "10px",
-            background: "#2c1f0e",
-            color: "#f5f1eb",
+            background: "#2A2622",
+            color: "#F5F2EE",
             border: "none",
             borderRadius: "4px",
             fontSize: "12px",

@@ -78,7 +78,7 @@ export default function WallItems({
                 ? metersToPixels(wall.length)
                 : metersToPixels(WALL_THICKNESS)
             }
-            fill={"#2c2419"}
+            fill={"#2A2622"}
           />
           <Text
             x={

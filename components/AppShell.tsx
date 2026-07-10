@@ -50,7 +50,7 @@ function StepIndicator({ current }: { current: number }) {
                 style={{
                   width: "24px",
                   height: "1px",
-                  background: isDone || isActive ? "#c4a882" : "#4a3d2e",
+                  background: isDone || isActive ? "#C49A5A" : "#928B82",
                   transition: "background 0.2s",
                 }}
               />
@@ -63,7 +63,7 @@ function StepIndicator({ current }: { current: number }) {
                 padding: "4px 10px",
                 borderRadius: "20px",
                 background: isActive
-                  ? "#c4a882"
+                  ? "#C49A5A"
                   : isDone
                     ? "transparent"
                     : "transparent",
@@ -76,16 +76,16 @@ function StepIndicator({ current }: { current: number }) {
                   height: "18px",
                   borderRadius: "50%",
                   background: isActive
-                    ? "#2c1f0e"
+                    ? "#2A2622"
                     : isDone
-                      ? "#c4a882"
-                      : "#4a3d2e",
+                      ? "#C49A5A"
+                      : "#928B82",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: "9px",
                   fontWeight: 800,
-                  color: isActive ? "#c4a882" : isDone ? "#2c1f0e" : "#7a6a5a",
+                  color: isActive ? "#C49A5A" : isDone ? "#2A2622" : "#F5F2EE",
                   flexShrink: 0,
                   transition: "all 0.2s",
                 }}
@@ -96,9 +96,11 @@ function StepIndicator({ current }: { current: number }) {
                 style={{
                   fontSize: "11px",
                   fontWeight: isActive ? 700 : 500,
-                  color: isActive ? "#2c1f0e" : isDone ? "#c4a882" : "#7a6a5a",
+                  color: isActive ? "#2A2622" : isDone ? "#C49A5A" : "#928B82",
                   whiteSpace: "nowrap",
                   transition: "color 0.2s",
+                  fontFamily:
+                    "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
                 }}
               >
                 {step.label}
@@ -134,14 +136,14 @@ function Sidebar() {
       style={{
         width: "20%",
         flexShrink: 0,
-        background: "#f5f1eb",
-        borderRight: "1px solid #e0d9cf",
+        background: "#F5F2EE",
+        borderRight: "1px solid #EDE8DF",
         height: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "start",
-        color: "#b0a898",
+        color: "#928B82",
         fontSize: "12px",
         fontStyle: "italic",
         paddingTop: "2rem",
@@ -314,8 +316,8 @@ export default function AppShell() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        fontFamily: "Georgia, 'Times New Roman', serif",
-        background: "#faf8f5",
+        fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
+        background: "#F5F2EE",
         overflow: "hidden",
       }}
     >
@@ -323,8 +325,8 @@ export default function AppShell() {
       <header
         style={{
           flexShrink: 0,
-          background: "#2c1f0e",
-          borderBottom: "3px solid #c4a882",
+          background: "#2A2622",
+          borderBottom: "3px solid #C49A5A",
           padding: "0 24px",
           height: "56px",
           display: "flex",
@@ -342,26 +344,42 @@ export default function AppShell() {
             flexShrink: 0,
           }}
         >
-          <span
-            style={{
-              fontSize: "15px",
-              fontWeight: 700,
-              color: "#f5f1eb",
-              letterSpacing: "0.04em",
-              lineHeight: 1,
-              fontFamily: "Georgia, serif",
-            }}
-          >
-            Bejger Manufaktura
-          </span>
+          <div>
+            <span
+              style={{
+                fontSize: "15px",
+                fontWeight: 700,
+                color: "#F5F2EE",
+                letterSpacing: "0.04em",
+                lineHeight: 1,
+                fontFamily: "var(--font-playfair), 'Playfair Display', serif",
+              }}
+            >
+              Bejger{" "}
+            </span>
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 500,
+                color: "#F5F2EE",
+                letterSpacing: "0.2em",
+                lineHeight: 1,
+                fontFamily:
+                  "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
+                textTransform: "uppercase",
+              }}
+            >
+              Manufaktura
+            </span>
+          </div>
           <span
             style={{
               fontSize: "10px",
-              color: "#c4a882",
-              letterSpacing: "0.12em",
+              color: "#C49A5A",
+              letterSpacing: "0.2em",
               textTransform: "uppercase",
               fontFamily:
-                "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
               fontWeight: 500,
             }}
           >
@@ -390,24 +408,24 @@ export default function AppShell() {
                 flexShrink: 0,
                 padding: "6px 14px",
                 background: "transparent",
-                color: "#f5f1eb",
-                border: "1px solid #4a3d2e",
+                color: "#F5F2EE",
+                border: "1px solid #3A3633",
                 borderRadius: "4px",
                 fontSize: "11px",
                 fontWeight: 600,
                 cursor: "pointer",
                 letterSpacing: "0.03em",
                 fontFamily:
-                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                  "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
                 transition: "all 0.15s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#c4a882";
-                e.currentTarget.style.color = "#c4a882";
+                e.currentTarget.style.borderColor = "#C49A5A";
+                e.currentTarget.style.color = "#C49A5A";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#4a3d2e";
-                e.currentTarget.style.color = "#7a6a5a";
+                e.currentTarget.style.borderColor = "#3A3633";
+                e.currentTarget.style.color = "#F5F2EE";
               }}
             >
               ↺ Zacznij od nowa
@@ -417,18 +435,26 @@ export default function AppShell() {
                 flexShrink: 0,
                 padding: "6px 14px",
                 background: "transparent",
-                color: "#f5f1eb",
-                border: "1px solid #4a3d2e",
+                color: "#F5F2EE",
+                border: "1px solid #3A3633",
                 borderRadius: "4px",
                 fontSize: "11px",
                 fontWeight: 600,
                 cursor: "pointer",
                 letterSpacing: "0.03em",
                 fontFamily:
-                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                  "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
                 transition: "all 0.15s",
               }}
               href="https://bejgermanufaktura.pl"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#C49A5A";
+                e.currentTarget.style.color = "#C49A5A";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#3A3633";
+                e.currentTarget.style.color = "#F5F2EE";
+              }}
             >
               ← Wróć na stronę główną
             </a>
@@ -455,8 +481,8 @@ export default function AppShell() {
                     top: "70px",
                     left: sidebarOpen ? "calc(20% - 1px)" : "0",
                     zIndex: 20,
-                    background: "#2c1f0e",
-                    color: "#f5f1eb",
+                    background: "#2A2622",
+                    color: "#F5F2EE",
                     border: "none",
                     borderRadius: "0 4px 4px 0",
                     padding: "10px 6px",
@@ -493,7 +519,7 @@ export default function AppShell() {
                 display: "flex",
                 flexDirection: "column",
                 overflow: "hidden",
-                background: "#faf8f5",
+                background: "#F5F2EE",
               }}
             >
               <div
@@ -519,7 +545,8 @@ export default function AppShell() {
                         left: "-2.3rem",
                         transform: "translate(0, -50%)",
                         fontSize: "11px",
-                        fontFamily: "sans-serif",
+                        fontFamily:
+                          "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
                       }}
                     >
                       {room.roomHeightCm}cm
@@ -530,7 +557,8 @@ export default function AppShell() {
                         bottom: "-1.2rem",
                         left: "50%",
                         fontSize: "11px",
-                        fontFamily: "sans-serif",
+                        fontFamily:
+                          "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
                         transform: "translate(-50%, 0)",
                       }}
                     >

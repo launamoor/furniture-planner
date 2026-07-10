@@ -30,10 +30,10 @@ const EMPTY_FORM: FormState = {
 const inputStyle: React.CSSProperties = {
   width: "100%",
   padding: "7px 9px",
-  border: "1px solid #e5e0d8",
+  border: "1px solid #EDE8DF",
   borderRadius: "4px",
   fontSize: "12px",
-  color: "#2c2419",
+  color: "#2A2622",
   background: "#fff",
   boxSizing: "border-box",
   outline: "none",
@@ -44,7 +44,7 @@ const labelStyle: React.CSSProperties = {
   display: "block",
   fontSize: "11px",
   fontWeight: 600,
-  color: "#7a6a5a",
+  color: "#928B82",
   marginBottom: "4px",
   letterSpacing: "0.02em",
 };
@@ -97,7 +97,7 @@ function PlacedItemRow({
         justifyContent: "space-between",
         padding: "7px 10px",
         borderRadius: "5px",
-        background: hovered ? "#f0ebe3" : "transparent",
+        background: hovered ? "#EDE8DF" : "transparent",
         transition: "background 0.12s",
         gap: "8px",
       }}
@@ -119,7 +119,7 @@ function PlacedItemRow({
           style={{
             fontSize: "12px",
             fontWeight: 600,
-            color: "#2c2419",
+            color: "#2A2622",
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -127,7 +127,7 @@ function PlacedItemRow({
         >
           {item.name}
         </div>
-        <div style={{ fontSize: "10px", color: "#9c8672" }}>
+        <div style={{ fontSize: "10px", color: "#928B82" }}>
           {Math.round(item.width * 100)}cm × {Math.round(item.height * 100)}cm x{" "}
           {Math.round(item.heightCm)}cm
           {item.woodType ? ` · ${item.woodType}` : ""}
@@ -142,7 +142,7 @@ function PlacedItemRow({
           background: "none",
           border: "none",
           cursor: "pointer",
-          color: hovered ? "#9c8672" : "#c4bdb4",
+          color: hovered ? "#928B82" : "#928B82",
           fontSize: "14px",
           lineHeight: 1,
           padding: "2px 4px",
@@ -161,7 +161,7 @@ function PlacedItemRow({
           background: "none",
           border: "none",
           cursor: "pointer",
-          color: hovered ? "#c0392b" : "#c4bdb4",
+          color: hovered ? "#c0392b" : "#928B82",
           fontSize: "14px",
           lineHeight: 1,
           padding: "2px 4px",
@@ -248,13 +248,13 @@ export default function FurniturePanel() {
     <div
       style={{
         flexShrink: 0,
-        background: "#f5f1eb",
-        borderRight: "1px solid #e5e0d8",
+        background: "#F5F2EE",
+        borderRight: "1px solid #EDE8DF",
         display: "flex",
         flexDirection: "column",
         height: "100%",
         overflow: "hidden",
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
         order: `${room.width > 5 ? "1" : ""}`,
       }}
     >
@@ -262,7 +262,7 @@ export default function FurniturePanel() {
       <div
         style={{
           padding: "16px 14px",
-          borderBottom: "1px solid #e5e0d8",
+          borderBottom: "1px solid #EDE8DF",
           display: "flex",
           flexDirection: "column",
           gap: "10px",
@@ -270,10 +270,10 @@ export default function FurniturePanel() {
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "10px",
             fontWeight: 700,
-            letterSpacing: "0.08em",
-            color: "#9c8672",
+            letterSpacing: "0.28em",
+            color: "#928B82",
             textTransform: "uppercase",
           }}
         >
@@ -286,7 +286,7 @@ export default function FurniturePanel() {
           <input
             style={{
               ...inputStyle,
-              borderColor: errors.name ? "#c0392b" : "#e5e0d8",
+              borderColor: errors.name ? "#c0392b" : "#EDE8DF",
             }}
             placeholder="np. Szafa"
             value={form.name}
@@ -306,7 +306,7 @@ export default function FurniturePanel() {
             <input
               style={{
                 ...inputStyle,
-                borderColor: errors.width ? "#c0392b" : "#e5e0d8",
+                borderColor: errors.width ? "#c0392b" : "#EDE8DF",
               }}
               type="number"
               min="1"
@@ -325,7 +325,7 @@ export default function FurniturePanel() {
             <input
               style={{
                 ...inputStyle,
-                borderColor: errors.depth ? "#c0392b" : "#e5e0d8",
+                borderColor: errors.depth ? "#c0392b" : "#EDE8DF",
               }}
               type="number"
               min="1"
@@ -344,7 +344,7 @@ export default function FurniturePanel() {
             <input
               style={{
                 ...inputStyle,
-                borderColor: errors.heightCm ? "#c0392b" : "#e5e0d8",
+                borderColor: errors.heightCm ? "#c0392b" : "#EDE8DF",
               }}
               type="number"
               min="1"
@@ -390,8 +390,8 @@ export default function FurniturePanel() {
           onClick={handleAdd}
           style={{
             padding: "8px",
-            background: "#2c2419",
-            color: "#f5f1eb",
+            background: "#2A2622",
+            color: "#F5F2EE",
             border: "none",
             borderRadius: "5px",
             fontSize: "12px",
@@ -399,8 +399,8 @@ export default function FurniturePanel() {
             cursor: "pointer",
             letterSpacing: "0.03em",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "#3d3425")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "#2c2419")}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "#3D3733")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "#2A2622")}
         >
           Dodaj do pomieszczenia
         </button>
@@ -408,7 +408,7 @@ export default function FurniturePanel() {
         <div
           style={{
             padding: "12px 14px",
-            borderTop: "1px solid #e5e0d8",
+            borderTop: "1px solid #EDE8DF",
             display: "flex",
             flexDirection: "column",
             gap: "1rem",
@@ -419,8 +419,8 @@ export default function FurniturePanel() {
             style={{
               width: "100%",
               padding: "9px",
-              background: "#2c2419",
-              color: "#f5f1eb",
+              background: "#2A2622",
+              color: "#F5F2EE",
               border: "none",
               borderRadius: "5px",
               fontSize: "12px",
@@ -429,8 +429,8 @@ export default function FurniturePanel() {
               letterSpacing: "0.03em",
               transition: "background 0.15s",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#3d3425")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "#2c2419")}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#3D3733")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#2A2622")}
           >
             Kontynuuj do mebli wiszących →
           </button>
@@ -440,18 +440,18 @@ export default function FurniturePanel() {
               width: "100%",
               padding: "7px",
               background: "transparent",
-              color: "#7a6a5a",
-              border: "1px solid #e5e0d8",
+              color: "#928B82",
+              border: "1px solid #EDE8DF",
               borderRadius: "5px",
               fontSize: "11px",
               cursor: "pointer",
               transition: "border-color 0.15s",
             }}
             onMouseEnter={(e) =>
-              (e.currentTarget.style.borderColor = "#8B6F47")
+              (e.currentTarget.style.borderColor = "#A0614A")
             }
             onMouseLeave={(e) =>
-              (e.currentTarget.style.borderColor = "#e5e0d8")
+              (e.currentTarget.style.borderColor = "#EDE8DF")
             }
           >
             ← Wroc do edycji scian
@@ -485,10 +485,10 @@ export default function FurniturePanel() {
           <>
             <span
               style={{
-                fontSize: "11px",
+                fontSize: "10px",
                 fontWeight: 700,
-                letterSpacing: "0.08em",
-                color: "#9c8672",
+                letterSpacing: "0.28em",
+                color: "#928B82",
                 textTransform: "uppercase",
                 padding: "0 10px 8px",
               }}

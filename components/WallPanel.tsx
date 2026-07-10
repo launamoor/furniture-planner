@@ -25,10 +25,10 @@ const EMPTY_FORM: FormState = {
 const inputStyle: React.CSSProperties = {
   width: "100%",
   padding: "7px 9px",
-  border: "1px solid #e5e0d8",
+  border: "1px solid #EDE8DF",
   borderRadius: "4px",
   fontSize: "12px",
-  color: "#2c2419",
+  color: "#2A2622",
   background: "#fff",
   boxSizing: "border-box",
   outline: "none",
@@ -39,7 +39,7 @@ const labelStyle: React.CSSProperties = {
   display: "block",
   fontSize: "11px",
   fontWeight: 600,
-  color: "#7a6a5a",
+  color: "#928B82",
   marginBottom: "4px",
   letterSpacing: "0.02em",
 };
@@ -65,7 +65,7 @@ function WallRow({
         justifyContent: "space-between",
         padding: "7px 10px",
         borderRadius: "5px",
-        background: hovered ? "#f0ebe3" : "transparent",
+        background: hovered ? "#EDE8DF" : "transparent",
         transition: "background 0.12s",
         gap: "8px",
       }}
@@ -86,7 +86,7 @@ function WallRow({
             style={{
               width: "14px",
               height: "3px",
-              background: "#2c2419",
+              background: "#2A2622",
               borderRadius: "1px",
             }}
           />
@@ -95,7 +95,7 @@ function WallRow({
             style={{
               width: "3px",
               height: "14px",
-              background: "#2c2419",
+              background: "#2A2622",
               borderRadius: "1px",
             }}
           />
@@ -108,13 +108,13 @@ function WallRow({
           style={{
             fontSize: "12px",
             fontWeight: 600,
-            color: "#2c2419",
+            color: "#2A2622",
           }}
         >
           {wall.orientation === "horizontal" ? "Horyzontalna" : "Wertykalna"}{" "}
           ściana
         </div>
-        <div style={{ fontSize: "10px", color: "#9c8672" }}>
+        <div style={{ fontSize: "10px", color: "#928B82" }}>
           Długość: {wall.length * 100}cm
         </div>
       </div>
@@ -127,7 +127,7 @@ function WallRow({
           background: "none",
           border: "none",
           cursor: "pointer",
-          color: hovered ? "#c0392b" : "#c4bdb4",
+          color: hovered ? "#c0392b" : "#928B82",
           fontSize: "14px",
           lineHeight: 1,
           padding: "2px 4px",
@@ -212,29 +212,28 @@ export default function WallPanel() {
         style={{
           width: "100%",
           flexShrink: 0,
-          background: "#f5f1eb",
-          borderRight: "1px solid #e5e0d8",
+          background: "#F5F2EE",
+          borderRight: "1px solid #EDE8DF",
           display: "flex",
           flexDirection: "column",
           height: "100%",
           overflow: "hidden",
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
         }}
       >
         {/* ── Header ── */}
         <div
           style={{
             padding: "16px 14px 12px",
-            borderBottom: "1px solid #e5e0d8",
+            borderBottom: "1px solid #EDE8DF",
           }}
         >
           <span
             style={{
-              fontSize: "11px",
+              fontSize: "10px",
               fontWeight: 700,
-              letterSpacing: "0.08em",
-              color: "#9c8672",
+              letterSpacing: "0.28em",
+              color: "#928B82",
               textTransform: "uppercase",
             }}
           >
@@ -243,7 +242,7 @@ export default function WallPanel() {
           <p
             style={{
               fontSize: "11px",
-              color: "#7a6a5a",
+              color: "#928B82",
               margin: "6px 0 0",
               lineHeight: 1.5,
             }}
@@ -257,7 +256,7 @@ export default function WallPanel() {
         <div
           style={{
             padding: "14px",
-            borderBottom: "1px solid #e5e0d8",
+            borderBottom: "1px solid #EDE8DF",
             display: "flex",
             flexDirection: "column",
             gap: "10px",
@@ -269,7 +268,7 @@ export default function WallPanel() {
             <input
               style={{
                 ...inputStyle,
-                borderColor: error ? "#c0392b" : "#e5e0d8",
+                borderColor: error ? "#c0392b" : "#EDE8DF",
               }}
               type="number"
               min="10"
@@ -301,8 +300,8 @@ export default function WallPanel() {
                 style={{
                   flex: 1,
                   padding: "8px 6px",
-                  background: "#2c2419",
-                  color: "#f5f1eb",
+                  background: "#2A2622",
+                  color: "#F5F2EE",
                   border: "none",
                   borderRadius: "5px",
                   fontSize: "11px",
@@ -315,17 +314,17 @@ export default function WallPanel() {
                   transition: "background 0.15s",
                 }}
                 onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#3d3425")
+                  (e.currentTarget.style.background = "#3D3733")
                 }
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "#2c2419")
+                  (e.currentTarget.style.background = "#2A2622")
                 }
               >
                 <div
                   style={{
                     width: "12px",
                     height: "2px",
-                    background: "#f5f1eb",
+                    background: "#F5F2EE",
                     borderRadius: "1px",
                   }}
                 />
@@ -336,8 +335,8 @@ export default function WallPanel() {
                 style={{
                   flex: 1,
                   padding: "8px 6px",
-                  background: "#2c2419",
-                  color: "#f5f1eb",
+                  background: "#2A2622",
+                  color: "#F5F2EE",
                   border: "none",
                   borderRadius: "5px",
                   fontSize: "11px",
@@ -350,17 +349,17 @@ export default function WallPanel() {
                   transition: "background 0.15s",
                 }}
                 onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#3d3425")
+                  (e.currentTarget.style.background = "#3D3733")
                 }
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "#2c2419")
+                  (e.currentTarget.style.background = "#2A2622")
                 }
               >
                 <div
                   style={{
                     width: "2px",
                     height: "12px",
-                    background: "#f5f1eb",
+                    background: "#F5F2EE",
                     borderRadius: "1px",
                   }}
                 />
@@ -385,7 +384,7 @@ export default function WallPanel() {
         <div
           style={{
             padding: "12px 14px",
-            borderTop: "1px solid #e5e0d8",
+            borderTop: "1px solid #EDE8DF",
           }}
         >
           <button
@@ -393,8 +392,8 @@ export default function WallPanel() {
             style={{
               width: "100%",
               padding: "9px",
-              background: "#2c2419",
-              color: "#f5f1eb",
+              background: "#2A2622",
+              color: "#F5F2EE",
               border: "none",
               borderRadius: "5px",
               fontSize: "12px",
@@ -403,8 +402,8 @@ export default function WallPanel() {
               letterSpacing: "0.03em",
               transition: "background 0.15s",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#3d3425")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "#2c2419")}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#3D3733")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#2A2622")}
           >
             Kontynuuj do mebli →
           </button>
@@ -415,18 +414,18 @@ export default function WallPanel() {
               marginTop: "6px",
               padding: "7px",
               background: "transparent",
-              color: "#7a6a5a",
-              border: "1px solid #e5e0d8",
+              color: "#928B82",
+              border: "1px solid #EDE8DF",
               borderRadius: "5px",
               fontSize: "11px",
               cursor: "pointer",
               transition: "border-color 0.15s",
             }}
             onMouseEnter={(e) =>
-              (e.currentTarget.style.borderColor = "#8B6F47")
+              (e.currentTarget.style.borderColor = "#A0614A")
             }
             onMouseLeave={(e) =>
-              (e.currentTarget.style.borderColor = "#e5e0d8")
+              (e.currentTarget.style.borderColor = "#EDE8DF")
             }
           >
             ← Wróć do rozmiaru pomieszczenia
@@ -448,10 +447,10 @@ export default function WallPanel() {
           <>
             <span
               style={{
-                fontSize: "11px",
+                fontSize: "10px",
                 fontWeight: 700,
-                letterSpacing: "0.08em",
-                color: "#9c8672",
+                letterSpacing: "0.28em",
+                color: "#928B82",
                 textTransform: "uppercase",
                 padding: "0 10px 8px",
               }}

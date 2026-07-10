@@ -6,14 +6,14 @@ export default function ScreenTooSmallWarning() {
       style={{
         position: "fixed",
         inset: 0,
-        background: "#faf8f5",
+        background: "#F5F2EE",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         padding: "24px",
         textAlign: "center",
-        fontFamily: "sans-serif",
+        fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
         zIndex: 100,
       }}
     >
@@ -22,8 +22,9 @@ export default function ScreenTooSmallWarning() {
         style={{
           fontSize: "18px",
           fontWeight: 700,
-          color: "#2c1f0e",
+          color: "#2A2622",
           marginBottom: "8px",
+          fontFamily: "var(--font-playfair), 'Playfair Display', serif",
         }}
       >
         Ekran jest za mały
@@ -31,7 +32,7 @@ export default function ScreenTooSmallWarning() {
       <p
         style={{
           fontSize: "13px",
-          color: "#7a6a5a",
+          color: "#928B82",
           maxWidth: "360px",
           lineHeight: 1.6,
         }}

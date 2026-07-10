@@ -25,9 +25,9 @@ function VisibilityToggle({ active, onClick, label }: VisibilityToggleProps) {
         alignItems: "center",
         gap: "6px",
         padding: "6px 12px",
-        background: active ? "#2c2419" : "#fff",
-        color: active ? "#f5f1eb" : "#7a6a5a",
-        border: active ? "1px solid #2c2419" : "1px solid #e5e0d8",
+        background: active ? "#2A2622" : "#fff",
+        color: active ? "#F5F2EE" : "#928B82",
+        border: active ? "1px solid #2A2622" : "1px solid #EDE8DF",
         borderRadius: "6px",
         fontSize: "11px",
         fontWeight: 600,
@@ -37,10 +37,10 @@ function VisibilityToggle({ active, onClick, label }: VisibilityToggleProps) {
         whiteSpace: "nowrap",
       }}
       onMouseEnter={(e) => {
-        if (!active) e.currentTarget.style.borderColor = "#8B6F47";
+        if (!active) e.currentTarget.style.borderColor = "#A0614A";
       }}
       onMouseLeave={(e) => {
-        if (!active) e.currentTarget.style.borderColor = "#e5e0d8";
+        if (!active) e.currentTarget.style.borderColor = "#EDE8DF";
       }}
     >
       {/* eye / eye-slash icon */}
@@ -72,7 +72,7 @@ export default function CanvasVisibilityControls({
         flexDirection: `${isCompact ? "column" : "row"}`,
         gap: "8px",
         padding: "10px 0",
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
       }}
     >
       <VisibilityToggle

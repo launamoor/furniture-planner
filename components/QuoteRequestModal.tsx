@@ -77,16 +77,16 @@ export default function QuoteRequestModal({
     width: "100%",
     padding: "8px 10px",
     fontSize: "13px",
-    border: "1px solid #d8d0c4",
+    border: "1px solid #928B82",
     borderRadius: "4px",
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-    backgroundColor: "#faf8f5",
+    fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
+    backgroundColor: "#F5F2EE",
   };
 
   const labelStyle: React.CSSProperties = {
     fontSize: "11px",
     fontWeight: 600,
-    color: "#7a6a5a",
+    color: "#928B82",
     display: "block",
     marginBottom: "4px",
   };
@@ -113,14 +113,14 @@ export default function QuoteRequestModal({
     >
       <div
         style={{
-          background: "#f5f1eb",
+          background: "#F5F2EE",
           borderRadius: "8px",
           padding: "28px",
           width: "420px",
           maxWidth: "90vw",
           maxHeight: "85vh",
           overflowY: "auto",
-          fontFamily: "sans-serif",
+          fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
           boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
         }}
         onClick={(e) => e.stopPropagation()}
@@ -129,8 +129,9 @@ export default function QuoteRequestModal({
           style={{
             fontSize: "16px",
             fontWeight: 700,
-            color: "#2c1f0e",
+            color: "#2A2622",
             marginBottom: "4px",
+            fontFamily: "var(--font-playfair), 'Playfair Display', serif",
           }}
         >
           Zapytaj o wycenę
@@ -138,7 +139,7 @@ export default function QuoteRequestModal({
         <p
           style={{
             fontSize: "12px",
-            color: "#7a6a5a",
+            color: "#928B82",
             marginBottom: "18px",
             lineHeight: 1.5,
           }}
@@ -249,8 +250,8 @@ export default function QuoteRequestModal({
             style={{
               padding: "9px 16px",
               background: "transparent",
-              color: "#7a6a5a",
-              border: "1px solid #d8d0c4",
+              color: "#928B82",
+              border: "1px solid #928B82",
               borderRadius: "4px",
               fontSize: "12px",
               fontWeight: 600,
@@ -264,8 +265,8 @@ export default function QuoteRequestModal({
             disabled={submitting}
             style={{
               padding: "9px 18px",
-              background: "#2c1f0e",
-              color: "#f5f1eb",
+              background: "#2A2622",
+              color: "#F5F2EE",
               border: "none",
               borderRadius: "4px",
               fontSize: "12px",

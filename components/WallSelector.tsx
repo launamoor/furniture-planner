@@ -31,9 +31,9 @@ function WallButton({
       title={`Elewacja — ściana ${WALL_LABELS[wall].toLowerCase()}`}
       style={{
         padding: "5px 10px",
-        background: selected ? "#2c2419" : "#fff",
-        color: selected ? "#f5f1eb" : "#7a6a5a",
-        border: selected ? "1px solid #2c2419" : "1px solid #e5e0d8",
+        background: selected ? "#2A2622" : "#fff",
+        color: selected ? "#F5F2EE" : "#928B82",
+        border: selected ? "1px solid #2A2622" : "1px solid #EDE8DF",
         borderRadius: "4px",
         fontSize: "10px",
         fontWeight: 600,
@@ -45,14 +45,14 @@ function WallButton({
       }}
       onMouseEnter={(e) => {
         if (!selected) {
-          e.currentTarget.style.borderColor = "#8B6F47";
-          e.currentTarget.style.color = "#2c2419";
+          e.currentTarget.style.borderColor = "#A0614A";
+          e.currentTarget.style.color = "#2A2622";
         }
       }}
       onMouseLeave={(e) => {
         if (!selected) {
-          e.currentTarget.style.borderColor = "#e5e0d8";
-          e.currentTarget.style.color = "#7a6a5a";
+          e.currentTarget.style.borderColor = "#EDE8DF";
+          e.currentTarget.style.color = "#928B82";
         }
       }}
     >
@@ -72,20 +72,20 @@ export default function WallSelector() {
   return (
     <div
       style={{
-        borderTop: "1px solid #e5e0d8",
+        borderTop: "1px solid #EDE8DF",
         padding: "14px",
         display: "flex",
         flexDirection: "column",
         gap: "8px",
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontFamily: "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
       }}
     >
       <span
         style={{
-          fontSize: "11px",
+          fontSize: "10px",
           fontWeight: 700,
-          letterSpacing: "0.08em",
-          color: "#9c8672",
+          letterSpacing: "0.28em",
+          color: "#928B82",
           textTransform: "uppercase",
         }}
       >
@@ -122,9 +122,9 @@ export default function WallSelector() {
           style={{
             width: "28px",
             height: "28px",
-            border: "1px solid #e5e0d8",
+            border: "1px solid #EDE8DF",
             borderRadius: "3px",
-            background: "#faf8f5",
+            background: "#F5F2EE",
           }}
         />
         <WallButton

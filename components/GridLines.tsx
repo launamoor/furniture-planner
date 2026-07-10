@@ -52,7 +52,7 @@ export default function GridLines({ room }: { room: Room }) {
         if ((currentHeight - metersToPixels(room.y)) % 100 === 0) {
           return (
             <Group key={`horizontal: ${i}`}>
-              <Line stroke={"#999"} points={line} strokeWidth={0.3} />
+              <Line stroke={"#928B82"} points={line} strokeWidth={0.3} />
               <Text
                 x={metersToPixels(room.width) + metersToPixels(room.x) + 2}
                 y={line[1] - 5}
@@ -63,7 +63,7 @@ export default function GridLines({ room }: { room: Room }) {
         } else {
           return (
             <Line
-              stroke={"#999"}
+              stroke={"#928B82"}
               points={line}
               strokeWidth={0.1}
               key={`horizontal: ${i}`}
@@ -76,7 +76,7 @@ export default function GridLines({ room }: { room: Room }) {
         if ((currentWidth - metersToPixels(room.x)) % 100 === 0) {
           return (
             <Group key={`vertical: ${i}`}>
-              <Line stroke={"#999"} points={line} strokeWidth={0.3} />
+              <Line stroke={"#928B82"} points={line} strokeWidth={0.3} />
               <Text
                 x={line[0] - 5}
                 y={metersToPixels(room.height) + metersToPixels(room.y) + 5}
@@ -87,7 +87,7 @@ export default function GridLines({ room }: { room: Room }) {
         } else {
           return (
             <Line
-              stroke={"#999"}
+              stroke={"#928B82"}
               points={line}
               strokeWidth={0.1}
               key={`vertical: ${i}`}

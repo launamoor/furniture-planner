@@ -89,8 +89,8 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
             y={originY}
             width={roomPxWidth}
             height={roomPxHeight}
-            fill="#f5f0eb"
-            stroke="#2c2419"
+            fill="#F5F2EE"
+            stroke="#2A2622"
             strokeWidth={1.5}
           />
 
@@ -102,7 +102,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
               <Line
                 key={`h-${i}`}
                 points={[originX, y, originX + roomPxWidth, y]}
-                stroke="#999"
+                stroke="#928B82"
                 strokeWidth={isMajor ? 0.3 : 0.1}
               />
             );
@@ -115,7 +115,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
               <Line
                 key={`v-${i}`}
                 points={[x, originY, x, originY + roomPxHeight]}
-                stroke="#999"
+                stroke="#928B82"
                 strokeWidth={isMajor ? 0.3 : 0.1}
               />
             );
@@ -129,7 +129,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
               originX + roomPxWidth,
               originY + roomPxHeight,
             ]}
-            stroke="#2c2419"
+            stroke="#2A2622"
             strokeWidth={2}
           />
 
@@ -149,7 +149,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                 y={originY}
                 width={w}
                 height={roomPxHeight}
-                fill="#2c2419"
+                fill="#2A2622"
               />
             );
           })}
@@ -177,18 +177,18 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   width={w}
                   height={h}
                   fill={item.colour}
-                  stroke="#2c2419"
+                  stroke="#2A2622"
                   strokeWidth={0.5}
                 />
                 {/* Cross lines */}
                 <Line
                   points={[mirroredX, y, mirroredX + w, y + h]}
-                  stroke="#2c2419"
+                  stroke="#2A2622"
                   strokeWidth={0.3}
                 />
                 <Line
                   points={[mirroredX + w, y, mirroredX, y + h]}
-                  stroke="#2c2419"
+                  stroke="#2A2622"
                   strokeWidth={0.3}
                 />
                 {/* Label */}
@@ -199,7 +199,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   height={h - 4}
                   text={item.name}
                   fontSize={9}
-                  fill="#2c2419"
+                  fill="#2A2622"
                   align="center"
                   verticalAlign="bottom"
                   ellipsis
@@ -212,7 +212,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   height={h - 4}
                   text={`${metersToPixels(item.width)}cm`}
                   fontSize={9}
-                  fill="#2c2419"
+                  fill="#2A2622"
                   align="center"
                   verticalAlign="top"
                   ellipsis
@@ -225,7 +225,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   height={h - 4}
                   text={`${item.heightCm}cm`}
                   fontSize={9}
-                  fill="#2c2419"
+                  fill="#2A2622"
                   align="left"
                   verticalAlign="middle"
                   ellipsis
@@ -258,19 +258,19 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   width={w}
                   height={h}
                   fill={item.colour}
-                  stroke="#2c2419"
+                  stroke="#2A2622"
                   strokeWidth={0.5}
                   dash={[4, 2]}
                 />
                 {/* Cross lines */}
                 <Line
                   points={[mirroredX, y, mirroredX + w, y + h]}
-                  stroke="#2c2419"
+                  stroke="#2A2622"
                   strokeWidth={0.3}
                 />
                 <Line
                   points={[mirroredX + w, y, mirroredX, y + h]}
-                  stroke="#2c2419"
+                  stroke="#2A2622"
                   strokeWidth={0.3}
                 />
                 {/* Label */}
@@ -281,7 +281,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   height={h - 4}
                   text={item.name}
                   fontSize={9}
-                  fill="#2c2419"
+                  fill="#2A2622"
                   align="center"
                   verticalAlign="bottom"
                   ellipsis
@@ -294,7 +294,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   height={h - 4}
                   text={`${metersToPixels(item.width)}cm`}
                   fontSize={9}
-                  fill="#2c2419"
+                  fill="#2A2622"
                   align="center"
                   verticalAlign="top"
                   ellipsis
@@ -307,7 +307,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
                   height={h - 4}
                   text={`${item.heightCm}cm`}
                   fontSize={9}
-                  fill="#2c2419"
+                  fill="#2A2622"
                   align="left"
                   verticalAlign="middle"
                   ellipsis
@@ -325,7 +325,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
           height={roomPxHeight}
           text={`${room.roomHeightCm}cm`}
           fontSize={8}
-          fill="#9c8672"
+          fill="#928B82"
           align="center"
           verticalAlign="middle"
           rotation={0}
@@ -339,7 +339,7 @@ const ElevationCanvas = forwardRef<Konva.Stage, ElevationCanvasProps>(
           width={roomPxWidth}
           text={`${Math.round(wallLengthM * 100)}cm`}
           fontSize={8}
-          fill="#9c8672"
+          fill="#928B82"
           align="center"
         /> */}
         </Layer>

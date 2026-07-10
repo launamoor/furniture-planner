@@ -39,7 +39,7 @@ const RoomCanvas = forwardRef<Konva.Stage>(function RoomCanvas(_, ref) {
           height={metersToPixels(room.height)}
           stroke={"black"}
           strokeWidth={1}
-          fill={"#f5f0eb"}
+          fill={"#F5F2EE"}
         />
         {/* Room - End */}
 
