@@ -18,6 +18,7 @@ type QuoteFormData = {
   telefon: string;
   rodzajProjektu: string;
   opisProjektu: string;
+  website?: string;
 };
 
 type SendQuoteBody = PdfPayload & {
@@ -28,6 +29,10 @@ export async function POST(req: NextRequest) {
   try {
     const body: SendQuoteBody = await req.json();
     const { formData, ...pdfPayload } = body;
+
+    if (body.formData?.website) {
+      return NextResponse.json({ success: true });
+    }
 
     if (!formData?.imie || !formData?.email || !formData?.telefon) {
       return NextResponse.json(

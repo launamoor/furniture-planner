@@ -8,6 +8,7 @@ export type QuoteFormData = {
   telefon: string;
   rodzajProjektu: string;
   opisProjektu: string;
+  website: string;
 };
 
 const PROJECT_TYPES = [
@@ -30,6 +31,7 @@ const initialForm: QuoteFormData = {
   telefon: "",
   rodzajProjektu: "kuchnia",
   opisProjektu: "",
+  website: "",
 };
 
 export default function QuoteRequestModal({
@@ -55,6 +57,11 @@ export default function QuoteRequestModal({
   };
 
   const handleSubmit = async () => {
+    if (form.website) {
+      setForm(initialForm);
+      onClose();
+      return;
+    }
     if (!validate()) return;
     setSubmitting(true);
     try {
@@ -151,6 +158,25 @@ export default function QuoteRequestModal({
             />
             {errors.imie && <span style={errorStyle}>{errors.imie}</span>}
           </div>
+
+          {/* Hidden field */}
+          <input
+            type="text"
+            name="website"
+            value={form.website}
+            onChange={(e) => setForm({ ...form, website: e.target.value })}
+            tabIndex={-1}
+            autoComplete="off"
+            style={{
+              position: "absolute",
+              left: "-9999px",
+              width: "1px",
+              height: "1px",
+              opacity: 0,
+            }}
+            aria-hidden="true"
+          />
+          {/* Hidden field - end */}
 
           <div>
             <label style={labelStyle}>E-mail</label>
