@@ -387,21 +387,19 @@ export default function AppShell() {
           </span>
         </div>
 
-        {step > 1 && (
-          <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-            <StepIndicator current={step} />
-          </div>
-        )}
+        <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+          <StepIndicator current={step} />
+        </div>
 
-        {step > 1 && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "1rem",
-            }}
-          >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "1rem",
+          }}
+        >
+          {step > 1 && (
             <button
               onClick={handleReset}
               style={{
@@ -430,36 +428,37 @@ export default function AppShell() {
             >
               ↺ Zacznij od nowa
             </button>
-            <a
-              style={{
-                flexShrink: 0,
-                padding: "6px 14px",
-                background: "transparent",
-                color: "#F5F2EE",
-                border: "1px solid #3A3633",
-                borderRadius: "4px",
-                fontSize: "11px",
-                fontWeight: 600,
-                cursor: "pointer",
-                letterSpacing: "0.03em",
-                fontFamily:
-                  "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
-                transition: "all 0.15s",
-              }}
-              href="https://bejgermanufaktura.pl"
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#C49A5A";
-                e.currentTarget.style.color = "#C49A5A";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#3A3633";
-                e.currentTarget.style.color = "#F5F2EE";
-              }}
-            >
-              ← Wróć na stronę główną
-            </a>
-          </div>
-        )}
+          )}
+
+          <a
+            style={{
+              flexShrink: 0,
+              padding: "6px 14px",
+              background: "transparent",
+              color: "#F5F2EE",
+              border: "1px solid #3A3633",
+              borderRadius: "4px",
+              fontSize: "11px",
+              fontWeight: 600,
+              cursor: "pointer",
+              letterSpacing: "0.03em",
+              fontFamily:
+                "var(--font-dmsans), 'DM Sans', system-ui, sans-serif",
+              transition: "all 0.15s",
+            }}
+            href="https://bejgermanufaktura.pl"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "#C49A5A";
+              e.currentTarget.style.color = "#C49A5A";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "#3A3633";
+              e.currentTarget.style.color = "#F5F2EE";
+            }}
+          >
+            ← Wróć na stronę główną
+          </a>
+        </div>
       </header>
 
       {/* ── Main area ── */}
