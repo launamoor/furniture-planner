@@ -66,48 +66,60 @@ export default function FurnitureItems({
             const snappedX = snapToGrid(pixelsToMeters(clampedX - roomX));
             const snappedY = snapToGrid(pixelsToMeters(clampedY - roomY));
 
-            const candidate = {
-              x: snappedX,
-              y: snappedY,
-              width: item.width,
-              height: item.height,
-            };
+            const tryMove = (x: number, y: number): boolean => {
+              const candidate = {
+                x,
+                y,
+                width: item.width,
+                height: item.height,
+              };
 
-            let collided = false;
+              const itemCollision = items.some(
+                (otherItem) =>
+                  otherItem.id !== item.id &&
+                  rectsOverlap(candidate, otherItem),
+              );
+              if (itemCollision) return false;
 
-            items.forEach((otherItem) => {
-              if (otherItem.id === item.id) return;
+              const wallCollision = walls.some((wall) =>
+                rectsOverlap(candidate, getWallRect(wall)),
+              );
+              if (wallCollision) return false;
 
-              if (rectsOverlap(candidate, otherItem)) collided = true;
-            });
-
-            walls.forEach((wall) => {
-              if (rectsOverlap(candidate, getWallRect(wall))) collided = true;
-            });
-
-            hangingItems.forEach((hangingItem) => {
-              const footprintOverlap = rectsOverlap(candidate, hangingItem);
-              if (!footprintOverlap) return;
-              if (
-                floorVsHangingOverlap(
+              const hangingCollision = hangingItems.some((hangingItem) => {
+                const footprintOverlap = rectsOverlap(candidate, hangingItem);
+                if (!footprintOverlap) return false;
+                return floorVsHangingOverlap(
                   item.floorOffsetCm ?? 0,
                   item.heightCm,
                   hangingItem.ceilingOffsetCm ?? 0,
                   hangingItem.heightCm,
                   room.roomHeightCm,
-                )
-              ) {
-                collided = true;
-              }
-            });
+                );
+              });
+              if (hangingCollision) return false;
 
-            if (collided) {
-              e.target.x(snapToGrid(metersToPixels(item.x) + roomX));
-              e.target.y(snapToGrid(metersToPixels(item.y) + roomY));
-            } else {
-              e.target.x(metersToPixels(snappedX) + roomX);
-              e.target.y(metersToPixels(snappedY) + roomY);
-              updateItemPosition(item.id, snappedX, snappedY);
+              return true;
+            };
+
+            let finalX = item.x;
+            let finalY = item.y;
+
+            if (tryMove(snappedX, snappedY)) {
+              finalX = snappedX;
+              finalY = snappedY;
+            } else if (tryMove(snappedX, item.y)) {
+              finalX = snappedX;
+              finalY = item.y;
+            } else if (tryMove(item.x, snappedY)) {
+              finalX = item.x;
+              finalY = snappedY;
+            }
+
+            e.target.x(metersToPixels(finalX) + roomX);
+            e.target.y(metersToPixels(finalY) + roomY);
+            if (finalX !== item.x || finalY !== item.y) {
+              updateItemPosition(item.id, finalX, finalY);
             }
           }}
         >

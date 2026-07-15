@@ -70,67 +70,61 @@ export default function HangingFurnitureItems({
             const snappedX = snapToGrid(pixelsToMeters(clampedX - roomX));
             const snappedY = snapToGrid(pixelsToMeters(clampedY - roomY));
 
-            let collided = false;
+            const tryMove = (x: number, y: number): boolean => {
+              const candidate = {
+                x,
+                y,
+                width: item.width,
+                height: item.height,
+              };
 
-            hangingItems.forEach((otherItem) => {
-              if (otherItem.id === item.id) return;
+              const hangingCollision = hangingItems.some((otherItem) => {
+                if (otherItem.id === item.id) return false;
+                const footprintOverlap = rectsOverlap(candidate, otherItem);
+                if (!footprintOverlap) return false;
+                return verticalRangesOverlap(
+                  item.ceilingOffsetCm ?? 0,
+                  item.heightCm,
+                  otherItem.ceilingOffsetCm ?? 0,
+                  otherItem.heightCm,
+                );
+              });
+              if (hangingCollision) return false;
 
-              const leftClear =
-                round(snappedX + item.width) <= round(otherItem.x);
-              const rightClear =
-                round(snappedX) >= round(otherItem.x + otherItem.width);
-              const topClear =
-                round(snappedY + item.height) <= round(otherItem.y);
-              const bottomClear =
-                round(snappedY) >= round(otherItem.y + otherItem.height);
-
-              const footprintOverlap =
-                !leftClear && !rightClear && !topClear && !bottomClear;
-              const heightOverlap = verticalRangesOverlap(
-                item.ceilingOffsetCm ?? 0,
-                item.heightCm,
-                otherItem.ceilingOffsetCm ?? 0,
-                otherItem.heightCm,
-              );
-
-              if (footprintOverlap && heightOverlap) {
-                collided = true;
-              }
-            });
-
-            items.forEach((floorItem) => {
-              const leftClear =
-                round(snappedX + item.width) <= round(floorItem.x);
-              const rightClear =
-                round(snappedX) >= round(floorItem.x + floorItem.width);
-              const topClear =
-                round(snappedY + item.height) <= round(floorItem.y);
-              const bottomClear =
-                round(snappedY) >= round(floorItem.y + floorItem.height);
-
-              const footprintOverlap =
-                !leftClear && !rightClear && !topClear && !bottomClear;
-              if (!footprintOverlap) return;
-
-              if (
-                floorVsHangingOverlap(
+              const floorCollision = items.some((floorItem) => {
+                const footprintOverlap = rectsOverlap(candidate, floorItem);
+                if (!footprintOverlap) return false;
+                return floorVsHangingOverlap(
                   floorItem.floorOffsetCm ?? 0,
                   floorItem.heightCm,
                   item.ceilingOffsetCm ?? 0,
                   item.heightCm,
                   room.roomHeightCm,
-                )
-              ) {
-                collided = true;
-              }
-            });
-            if (collided) {
-              e.target.x(snapToGrid(metersToPixels(item.x) + roomX));
-              e.target.y(snapToGrid(metersToPixels(item.y) + roomY));
-            } else {
-              e.target.x(metersToPixels(snappedX) + roomX);
-              e.target.y(metersToPixels(snappedY) + roomY);
-              updateHangingItemPosition(item.id, snappedX, snappedY);
+                );
+              });
+              if (floorCollision) return false;
+
+              return true;
+            };
+
+            let finalX = item.x;
+            let finalY = item.y;
+
+            if (tryMove(snappedX, snappedY)) {
+              finalX = snappedX;
+              finalY = snappedY;
+            } else if (tryMove(snappedX, item.y)) {
+              finalX = snappedX;
+              finalY = item.y;
+            } else if (tryMove(item.x, snappedY)) {
+              finalX = item.x;
+              finalY = snappedY;
+            }
+
+            e.target.x(metersToPixels(finalX) + roomX);
+            e.target.y(metersToPixels(finalY) + roomY);
+            if (finalX !== item.x || finalY !== item.y) {
+              updateHangingItemPosition(item.id, finalX, finalY);
             }
           }}
         >
